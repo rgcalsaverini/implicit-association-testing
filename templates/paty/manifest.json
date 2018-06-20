@@ -1,0 +1,60 @@
+{
+  "name": "Paty's Test",
+  "description": "...",
+  "groups": {
+    "neg": {
+      "name": "Bad",
+      "items": [
+        {"type": "text", "value": "Dumb"},
+        {"type": "text", "value": "Failure"},
+        {"type": "text", "value": "Rotten"},
+        {"type": "text", "value": "Detest"},
+        {"type": "text", "value": "Nasty"},
+        {"type": "text", "value": "Boring"},
+        {"type": "text", "value": "Pathetic"},
+        {"type": "text", "value": "Imbecile"},
+        {"type": "text", "value": "Ridiculous"}
+      ]
+    },
+    "pos": {
+      "name": "Good",
+      "items": [
+        {"type": "text", "value": "Great"},
+        {"type": "text", "value": "Fantastic"},
+        {"type": "text", "value": "Interesting"},
+        {"type": "text", "value": "Exciting"},
+        {"type": "text", "value": "Brilliant"},
+        {"type": "text", "value": "Good"}
+      ]
+    },
+    "food": {
+      "name": "Food",
+      "items": [
+        {"type": "text", "value": "Beef"},
+        {"type": "text", "value": "Cheese"},
+        {"type": "text", "value": "Pasta"},
+        {"type": "text", "value": "Chocolate"}
+      ]
+    },
+    "drink": {
+      "name": "Drink",
+      "items": [
+        {"type": "text", "value": "Coca"},
+        {"type": "text", "value": "Wine"},
+        {"type": "text", "value": "Water"},
+        {"type": "text", "value": "Beer"}
+      ]
+    }
+  },
+
+    "positive_groups": ["pos"],
+    "negative_groups": ["neg"],
+    "versions": [
+      {
+        "tasks": [
+          [["pos", "food"], ["neg", "drink"]],
+          [["drink", "pos"], ["food", "neg"]]
+        ]
+      }
+    ]
+}

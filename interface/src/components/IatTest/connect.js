@@ -1,14 +1,15 @@
 import { connect } from 'react-redux';
 import IatTest from './IatTest';
-// import { getConsent } from '../../actions';
 
 const stateToProps = state => ({
   testStarted: state.testReducer.testStarted,
-  obtainedConsent: state.testReducer.consentData,
+  introData: state.testReducer.introData,
+  obtainedConsent: state.testReducer.obtainedConsent,
+  testData: state.testReducer.testData,
+  taskNumber: state.testReducer.taskNumber,
 });
 
 const dispatchToProps = {
-  // getConsent,
 };
 
 const ConnectedComponent = connect(

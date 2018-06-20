@@ -7,7 +7,7 @@
     "host": "localhost"
   },
   "disclaimers":{
-    "iat_generic": "### Disclaimer ###\n Here are some generic disclaimers regarding the IAT and data collection",
+    "path": "disclaimer.md",
     "consent_button": "I wish to proceed"
   }
 }

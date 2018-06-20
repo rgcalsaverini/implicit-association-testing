@@ -43,9 +43,12 @@ def create_models(me=mongoengine):
             return user.save()
 
     class TaskResult(me.EmbeddedDocument):
-        pairing = me.ListField(field=me.StringField(), required=True)
-        time = me.FloatField(required=True)
-        mistakes = me.FloatField(required=True)
+        duration = me.FloatField(required=True)
+        mistakes = me.IntField(required=True)
+
+    class TaskStructure(me.EmbeddedDocument):
+        left = me.ListField(me.StringField(), required=True)
+        right = me.ListField(me.StringField(), required=True)
 
     class Test(me.Document):
         id = me.StringField(primary_key=True)
@@ -54,17 +57,28 @@ def create_models(me=mongoengine):
         user = me.LazyReferenceField(User, required=False, default=None)
         created_at = me.DateTimeField()
         finished = me.BooleanField(required=True, default=False)
-        task_results = me.EmbeddedDocumentListField(TaskResult)
+        structure = me.EmbeddedDocumentListField(TaskStructure)
+        results = me.EmbeddedDocumentListField(TaskResult)
+        winner = me.StringField()
+        winner_score = me.FloatField()
 
         @staticmethod
-        def new(template, version_id, user_id):
+        def new(template, version, user_id):
             now = datetime.datetime.now()
             test = Test(id=uuid4().hex, template=template.id, user=user_id,
-                        created_at=now, version=version_id,
+                        created_at=now, version=version['version_id'],
                         finished=False)
+            for task in version['structure']:
+                test.structure.create(left=task[0], right=task[1])
             return test.save()
 
-        def set_result(self):
-            pass
+        def set_result(self, results, winner, winner_score):
+            self.finished = True
+            self.winner = winner
+            self.winner_score = winner_score
+            self.results.delete()
+            for res in results:
+                self.results.create(**res)
+            self.save()
 
     return ModelsContainer(User, Test)

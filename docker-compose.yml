@@ -2,21 +2,27 @@ version: '3.6'
 
 services:
   backend:
-    image: registry.calsaverini.com:5000/iat/app${APP_VERSION}
+    image: registry.calsaverini.com:5000/iat/app:${APP_VERSION}
+    volumes:
+      - iat-templates:/templates
     configs:
       - source: config
         target: /root/configs.json
+      - source: disclaimer
+        target: /root/disclaimer.md
     networks:
       - web
       - default
     deploy:
       replicas: 1
+      placement:
+        constraints:
+          - node.labels.iat == 1
       labels:
         - "traefik.port=80"
         - "traefik.docker.network=web"
         - "traefik.frontend.rule=Host:iat.calsaverini.com"
-    volumes:
-      - iat-templates:/templates
+
 
   mongo:
     image: mongo:3.7
@@ -25,13 +31,32 @@ services:
     networks:
       - default
 
+  browserpy:
+    image: registry.calsaverini.com:5000/misc/browsepy:${BROWSEPY_VERSION}
+    volumes:
+      - iat-templates:/files
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.iat == 1
+    ports:
+      - 9267:5050
+
 configs:
   config:
     external:
       name: iat.v${CONFIG_VERSION:-1}
+  disclaimer:
+    external:
+      name: iat_disclaimer.v${DISCLAIMER_VERSION:-1}
 
 volumes:
   iat-mongo:
     external: true
   iat-templates:
+    external: true
+
+networks:
+  web:
     external: true

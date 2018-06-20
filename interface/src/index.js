@@ -1,3 +1,3 @@
-import entry from './entry';
+import entry from 'entry';
 
 entry();

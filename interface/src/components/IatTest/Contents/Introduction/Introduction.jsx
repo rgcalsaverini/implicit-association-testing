@@ -4,12 +4,12 @@ import { Redirect } from 'react-router-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 import breaks from 'remark-breaks';
 import ReactMarkdown from 'react-markdown';
-import { ConsentContainer, ConsentText, ConsentButtonContainer } from './styles';
+import { Container, Text } from './styles';
 
 
-const Consent = (props) => {
-  const { obtainedConsent, consentData, pendingReq,
-    getConsent, error, giveConsent } = props;
+const Introduction = (props) => {
+  const { obtainedConsent, introData, pendingReq,
+    getIntro, error, giveConsent } = props;
   const templateId = props.match.params.templateId;
 
   if (obtainedConsent) {
@@ -20,41 +20,41 @@ const Consent = (props) => {
     return <div> Error {JSON.stringify(error)}</div>;
   }
 
-  if (!consentData) {
+  if (!introData) {
     if (!pendingReq) {
-      getConsent(templateId);
+      getIntro(templateId);
     }
 
     return <div> Waiting Consent Req </div>;
   }
 
   return (
-    <ConsentContainer>
-      <ConsentText>
+    <Container>
+      <Text>
         <ReactMarkdown
           plugins={[breaks]}
-          source={consentData.text}
+          source={introData.text}
         />
-      </ConsentText>
-      <ConsentButtonContainer>
+      </Text>
+      <div>
         <RaisedButton
-          label={consentData.button}
+          label={introData.button}
           onClick={giveConsent}
           primary
         />
-      </ConsentButtonContainer>
-    </ConsentContainer>
+      </div>
+    </Container>
   );
 };
 
-Consent.propTypes = {
+Introduction.propTypes = {
   obtainedConsent: PropTypes.bool.isRequired,
-  consentData: PropTypes.shape({
+  introData: PropTypes.shape({
     text: PropTypes.string,
     button: PropTypes.string,
   }),
   pendingReq: PropTypes.bool.isRequired,
-  getConsent: PropTypes.func.isRequired,
+  getIntro: PropTypes.func.isRequired,
   giveConsent: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -63,9 +63,9 @@ Consent.propTypes = {
   }),
 };
 
-Consent.defaultProps = {
-  consentData: null,
+Introduction.defaultProps = {
+  introData: null,
   match: { params: { templateId: null } },
 };
 
-export default Consent;
+export default Introduction;

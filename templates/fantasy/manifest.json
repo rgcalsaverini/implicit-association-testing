@@ -1,8 +1,6 @@
 {
   "name": "Fantasy Bias",
   "description": "Test your fantasy bias",
-  "presentation": "### About the test ###\nHere is the test presentation text, and is where you are expected to tell people about this particular text. You can use **markdown** for formatting, like this:\n - One item\n - Another item with *italic text*\n\nAnd even add images:\n![alt text](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3SoMJdQ-0Mb2PtZmjno5g9sgBoLMfDywfeekqCxGNpXpSfqGt)",
-  "disclaimer": "And some optional disclaimers for this specific test. This can be omitted on the test configuration",
   "groups": {
     "sw": {
       "name": "Star Wars",
@@ -10,8 +8,11 @@
         {"type": "text", "value": "Jedi"},
         {"type": "text", "value": "Star Wars"},
         {"type": "text", "value": "Darth Vader"},
+        {"type": "text", "value": "Yoda"},
+        {"type": "text", "value": "Death Star"},
         {"type": "text", "value": "Lightsaber"},
-        {"type": "image", "value": "star_wars.svg"}
+        {"type": "image", "value": "star_wars.svg"},
+        {"type": "image", "value": "sw2.png"}
       ]
     },
     "hp": {
@@ -21,7 +22,10 @@
         {"type": "text", "value": "Dumbledore"},
         {"type": "text", "value": "Hogwarts"},
         {"type": "text", "value": "Magic wand"},
-        {"type": "image", "value": "potter.svg"}
+        {"type": "text", "value": "Herminone"},
+        {"type": "text", "value": "Voldemort"},
+        {"type": "image", "value": "potter.svg"},
+        {"type": "image", "value": "hp2.png"}
       ]
     },
     "lotr": {
@@ -31,51 +35,47 @@
         {"type": "text", "value": "Gandalf"},
         {"type": "text", "value": "Elf"},
         {"type": "text", "value": "Frodo"},
+        {"type": "text", "value": "Sauron"},
+        {"type": "text", "value": "Rivendell"},
+        {"type": "text", "value": "The One Ring"},
+        {"type": "image", "value": "ring.png"},
         {"type": "image", "value": "lotr.svg"}
       ]
     },
     "neg": {
-      "name": "Negative",
+      "name": "Bad",
       "items": [
         {"type": "text", "value": "Dumb"},
-        {"type": "text", "value": "Bad"},
-        {"type": "text", "value": "Childish"},
-        {"type": "text", "value": "Irrational"},
-        {"type": "text", "value": "Pathetic"}
+        {"type": "text", "value": "Failure"},
+        {"type": "text", "value": "Rotten"},
+        {"type": "text", "value": "Detest"},
+        {"type": "text", "value": "Nasty"},
+        {"type": "text", "value": "Boring"},
+        {"type": "text", "value": "Pathetic"},
+        {"type": "text", "value": "Imbecile"},
+        {"type": "text", "value": "Ridiculous"}
       ]
     },
     "pos": {
-      "name": "Positive",
+      "name": "Good",
       "items": [
         {"type": "text", "value": "Great"},
-        {"type": "text", "value": "Funny"},
+        {"type": "text", "value": "Fantastic"},
         {"type": "text", "value": "Interesting"},
         {"type": "text", "value": "Exciting"},
+        {"type": "text", "value": "Brilliant"},
         {"type": "text", "value": "Good"}
       ]
     }
   },
+  "positive_groups": ["pos"],
+  "negative_groups": ["neg"],
+  "result_text": "Your data suggest a $LEVEL automatic preference for $WINNER over $LOSER",
   "versions": [
     {
       "tasks": [
-        [["hp"], ["sw"]],
-        [["neg"], ["pos"]],
         [["hp", "neg"], ["sw", "pos"]],
-        [["hp", "neg"], ["sw", "pos"]],
-        [["sw"], ["hp"]],
-        [["sw", "neg"], ["hp", "pos"]],
         [["sw", "neg"], ["hp", "pos"]]
-      ]
-    },
-    {
-      "tasks": [
-        [["hp"], ["lotr"]],
-        [["neg"], ["pos"]],
-        [["hp", "neg"], ["lotr", "pos"]],
-        [["hp", "neg"], ["lotr", "pos"]],
-        [["lotr"], ["hp"]],
-        [["lotr", "neg"], ["hp", "pos"]],
-        [["lotr", "neg"], ["hp", "pos"]]
       ]
     }
   ]

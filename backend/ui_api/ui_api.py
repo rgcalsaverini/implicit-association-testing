@@ -1,21 +1,14 @@
+from functools import wraps
+
 from cerberus import Validator
 from flask import Blueprint, session, request
-from functools import wraps
+
 from backend.templates import template_from_file, template_path
 from .router import Router, make_error
 
-test_schema = {
-    'template': {
-        'type': 'string',
-        'required': True,
-        'nullable': False,
-    }
-}
-
 result_schema = {
     'results': {
-        'minlength': 7,
-        'maxlength': 7,
+        'minlength': 1,
         'type': 'list',
         'required': True,
         'nullable': False,
@@ -28,12 +21,26 @@ result_schema = {
                     'minlength': 1,
                     'maxlength': 2,
                 },
-                'time': {'type': 'integer'},
+                'duration': {'type': 'float'},
                 'mistakes': {'type': 'integer'},
             }
         }
     }
 }
+
+def separate_groups(groups, template):
+    meaning_groups = template.positive_groups + template.negative_groups
+
+    if groups[0] in meaning_groups:
+        object_group = groups[1]
+        positive = groups[0] in template.positive_groups
+    elif groups[1] in meaning_groups:
+        object_group = groups[0]
+        positive = groups[1] in template.positive_groups
+    else:
+        raise ValueError()
+
+    return object_group, positive
 
 
 def ui_api(models, configs):
@@ -76,25 +83,88 @@ def ui_api(models, configs):
     router = Router(blueprint, decorator=set_user)
     result_validator = Validator(result_schema)
 
-    @router.get('consents/<string:template_id>')
+    @router.get('introductions/<string:template_id>')
     @get_template
-    def get_consent(template):
-        return template.introduction(configs.disclaimers)
+    def get_intro(template):
+        return template.introduction(configs)
 
     @router.post('tests/<string:template_id>')
     @get_template
     def new_test(template):
         version = template.random_version()
-        test = models.Test.new(template, version['id'], session['user'])
+        test = models.Test.new(template, version, session['user'])
 
         return {
             **version,
+            'img_prefix': '/templates/%s/' % template.id,
             'id': test.id
         }
 
     @router.post('tests/<string:test_id>/results', validator=result_validator)
     @get_test
     def add_test_result(test, data):
-        return test.id
+        try:
+            path = template_path(configs, test.template)
+            template = template_from_file(test.template, path)
+
+        except OSError:
+            msg = "Template '%s' not found" % test.template
+            return make_error(msg, 404)
+
+        task_res = data['results']
+
+        totals = []
+        group_ids = []
+
+        for i, task_struct in enumerate(test.structure):
+            if len(task_struct.left) < 2 or len(task_struct.right) < 2:
+                continue
+            l_group, l_is_pos = separate_groups(task_struct.left, template)
+            r_group, r_is_pos = separate_groups(task_struct.right, template)
+            l_mult = -1 if l_is_pos else 1
+            r_mult = -1 if r_is_pos else 1
+            total_points = task_res[i]['duration'] + task_res[i]['mistakes']
+
+            if len(group_ids) == 0:
+                group_ids.extend([l_group, r_group])
+                totals.extend([total_points * l_mult, total_points * r_mult])
+            else:
+                l_idx = group_ids.index(l_group)
+                r_idx = group_ids.index(r_group)
+                totals[r_idx] += total_points * r_mult
+                totals[l_idx] += total_points * l_mult
+
+        if totals[0] > totals[1]:
+            winner_id = group_ids[0]
+            looser_id = group_ids[1]
+        else:
+            winner_id = group_ids[1]
+            looser_id = group_ids[0]
+        score = abs(totals[0])
+
+        print(group_ids, totals)
+
+        if score < 2:
+            classification = 'little to no'
+        elif score < 5:
+            classification = 'slight'
+        elif score < 9:
+            classification = 'moderate'
+        else:
+            classification = 'strong'
+
+        result = {
+            'winner_id': winner_id,
+            'winner_name': template.groups[winner_id]['name'],
+            'looser_id': looser_id,
+            'looser_name': template.groups[looser_id]['name'],
+            'classification': classification,
+            'text': template.result_text,
+            'success': True,
+            # 'score': score,
+        }
+        test.set_result(task_res, winner_id, score)
+
+        return result
 
     return blueprint

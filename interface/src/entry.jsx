@@ -5,10 +5,10 @@ import { Provider } from 'react-redux';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import store from './store';
-import { colors } from './base_styles';
+import IatTest from 'components/IatTest';
+import { store } from 'state_management';
+import { colors } from 'base_styles';
 
-import IatTest from './components/IatTest';
 
 /* eslint-disable no-unused-expressions */
 injectGlobal`
