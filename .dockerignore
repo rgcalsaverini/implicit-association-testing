@@ -1,0 +1,10 @@
+*/node_modules
+node_modules
+*/env
+env
+venv
+*/build
+build
+*.pyc
+.idea
+.coverage

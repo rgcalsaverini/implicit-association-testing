@@ -1,0 +1,55 @@
+{
+  "name": "crawl-service",
+  "version": "0.1.0",
+  "proxy": "http://localhost:5000/",
+  "private": true,
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true
+    }
+  },
+  "dependencies": {
+    "axios": "^0.16.1",
+    "copy-to-clipboard": "^3.0.8",
+    "hoek": "^4.2.1",
+    "material-ui": "^0.20.1",
+    "moment": "^2.20.1",
+    "prop-types": "^15.5.10",
+    "query-string": "^5.1.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-markdown": "^3.3.4",
+    "react-redux": "^5.0.5",
+    "react-router": "^4.1.1",
+    "react-router-dom": "^4.1.1",
+    "react-syntax-highlighter": "^7.0.2",
+    "redux": "^3.6.0",
+    "redux-axios-middleware": "^4.0.0",
+    "redux-immutable-state-invariant": "^2.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-promise-middleware": "^4.3.0",
+    "redux-thunk": "^2.2.0",
+    "remark-breaks": "^1.0.0",
+    "styled-components": "^1.4.6",
+    "url-parse": "^1.2.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "enzyme": "^2.8.2",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.2.1",
+    "react-addons-test-utils": "^15.5.1",
+    "react-scripts": "^1.1.4",
+    "sinon": "^2.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eslint": "eslint ."
+  }
+}

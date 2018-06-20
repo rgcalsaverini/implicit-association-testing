@@ -1,0 +1,37 @@
+version: '3.6'
+
+services:
+  backend:
+    image: registry.calsaverini.com:5000/iat/app${APP_VERSION}
+    configs:
+      - source: config
+        target: /root/configs.json
+    networks:
+      - web
+      - default
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.port=80"
+        - "traefik.docker.network=web"
+        - "traefik.frontend.rule=Host:iat.calsaverini.com"
+    volumes:
+      - iat-templates:/templates
+
+  mongo:
+    image: mongo:3.7
+    volumes:
+      - iat-mongo:/data/db
+    networks:
+      - default
+
+configs:
+  config:
+    external:
+      name: iat.v${CONFIG_VERSION:-1}
+
+volumes:
+  iat-mongo:
+    external: true
+  iat-templates:
+    external: true

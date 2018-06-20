@@ -1,0 +1,13 @@
+{
+  "templates": {
+    "path": "templates"
+  },
+  "mongo": {
+    "db": "devt2",
+    "host": "localhost"
+  },
+  "disclaimers":{
+    "iat_generic": "### Disclaimer ###\n Here are some generic disclaimers regarding the IAT and data collection",
+    "consent_button": "I wish to proceed"
+  }
+}
