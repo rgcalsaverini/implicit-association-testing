@@ -1,7 +1,7 @@
 _default_chart = [
-    [2, 'little to no'],
-    [5, 'slight'],
-    [9, 'moderate'],
+    [6, 'little to no'],
+    [11, 'slight'],
+    [17, 'moderate'],
     ['strong']
 ]
 

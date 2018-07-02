@@ -1,7 +1,28 @@
 image: python:3
 
-test:
+variables:
+  CONTAINER_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - test
+  - build
+
+test_backend:
+  stage: test
   script:
     - pip install -r requirements.txt
     - pip install -r dev_requirements.txt
     - nosetests -v
+
+build_images:
+  stage: build
+  image: docker:stable
+  services:
+   - docker:dind
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+    - docker pull $CONTAINER_IMAGE:latest || true
+    - docker build --cache-from $CONTAINER_IMAGE:latest --tag $CONTAINER_IMAGE:$CI_BUILD_REF --tag $CONTAINER_IMAGE:latest -f deploy/app/Dockerfile .
+    - docker push $CONTAINER_IMAGE:$CI_BUILD_REF
+    - docker push $CONTAINER_IMAGE:latest
