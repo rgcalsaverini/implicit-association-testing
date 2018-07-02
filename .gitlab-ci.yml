@@ -1,7 +1,4 @@
-image:
-  name: python:3
-  entrypoint: ["/bin/bash", "-c"]
-
+image: python:3
 
 test:
   script:
