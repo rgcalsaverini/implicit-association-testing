@@ -3,6 +3,7 @@ from functools import wraps
 from cerberus import Validator
 from flask import Blueprint, session, request
 
+from backend.grading import grade
 from backend.templates import template_from_file, template_path
 from backend.utils import format_text
 from .router import Router, make_error
@@ -113,60 +114,19 @@ def ui_api(models, configs):
             msg = "Template '%s' not found" % test.template
             return make_error(msg, 404)
 
-        task_res = data['results']
+        measurements = data['results']
 
-        totals = []
-        group_ids = []
+        result = grade(test, measurements)
+        test.set_result(result, measurements)
 
-        for i, task_struct in enumerate(test.structure):
-            if len(task_struct.left) < 2 or len(task_struct.right) < 2:
-                continue
-            l_group, l_is_pos = separate_groups(task_struct.left, template)
-            r_group, r_is_pos = separate_groups(task_struct.right, template)
-            l_mult = -1 if l_is_pos else 1
-            r_mult = -1 if r_is_pos else 1
-            total_points = task_res[i]['duration'] + task_res[i]['mistakes']
-
-            if len(group_ids) == 0:
-                group_ids.extend([l_group, r_group])
-                totals.extend([total_points * l_mult, total_points * r_mult])
-            else:
-                l_idx = group_ids.index(l_group)
-                r_idx = group_ids.index(r_group)
-                totals[r_idx] += total_points * r_mult
-                totals[l_idx] += total_points * l_mult
-
-        if totals[0] > totals[1]:
-            winner_id = group_ids[0]
-            looser_id = group_ids[1]
-        else:
-            winner_id = group_ids[1]
-            looser_id = group_ids[0]
-        score = abs(totals[0])
-
-        print(group_ids, totals)
-
-        if score < 2:
-            classification = 'little to no'
-        elif score < 5:
-            classification = 'slight'
-        elif score < 9:
-            classification = 'moderate'
-        else:
-            classification = 'strong'
-
-        result = {
+        return {
             'text': format_text(
                 template.result_text,
-                looser=template.groups[looser_id]['name'],
-                winner=template.groups[winner_id]['name'],
-                level=classification,
+                loser=template.groups[result['loser']]['name'],
+                winner=template.groups[result['winner']]['name'],
+                level=result['classification'],
             ),
             'success': True,
-            # 'score': score,
         }
-        test.set_result(task_res, winner_id, score)
-
-        return result
 
     return blueprint

@@ -1,6 +1,6 @@
 image:
   name: python:3
-  entrypoint: ["/bin/bash"]
+  entrypoint: ["/bin/bash", "-c"]
 
 
 test:

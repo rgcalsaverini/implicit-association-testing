@@ -42,7 +42,7 @@ def create_models(me=mongoengine):
             user = User(id=uuid4().hex, created_at=now, ip=ip[0])
             return user.save()
 
-    class TaskResult(me.EmbeddedDocument):
+    class TaskMeasurement(me.EmbeddedDocument):
         duration = me.FloatField(required=True)
         mistakes = me.IntField(required=True)
 
@@ -58,27 +58,36 @@ def create_models(me=mongoengine):
         created_at = me.DateTimeField()
         finished = me.BooleanField(required=True, default=False)
         structure = me.EmbeddedDocumentListField(TaskStructure)
-        results = me.EmbeddedDocumentListField(TaskResult)
+        positive_groups = me.ListField(me.StringField())
+        negative_groups = me.ListField(me.StringField())
+        measurements = me.EmbeddedDocumentListField(TaskMeasurement)
+        classification = me.StringField()
         winner = me.StringField()
         winner_score = me.FloatField()
 
         @staticmethod
         def new(template, version, user_id):
             now = datetime.datetime.now()
-            test = Test(id=uuid4().hex, template=template.id, user=user_id,
-                        created_at=now, version=version['version_id'],
-                        finished=False)
+            test = Test(id=uuid4().hex,
+                        template=template.id,
+                        user=user_id,
+                        created_at=now,
+                        version=version['version_id'],
+                        finished=False,
+                        positive_groups=template.positive_groups,
+                        negative_groups=template.negative_groups)
             for task in version['structure']:
                 test.structure.create(left=task[0], right=task[1])
             return test.save()
 
-        def set_result(self, results, winner, winner_score):
+        def set_result(self, results, measurements):
             self.finished = True
-            self.winner = winner
-            self.winner_score = winner_score
-            self.results.delete()
-            for res in results:
-                self.results.create(**res)
+            self.winner = results['winner']
+            self.winner_score = results['score']
+            self.classification = results['classification']
+            self.measurements.delete()
+            for mes in measurements:
+                self.measurements.create(**mes)
             self.save()
 
     return ModelsContainer(User, Test)

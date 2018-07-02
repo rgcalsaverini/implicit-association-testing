@@ -110,7 +110,7 @@ class Task extends Component {
         </Section>
         <Section long>
           If you make a mistake, a red <Accent red> X </Accent> will appear,
-          press the other key to continue.
+          just try again.
         </Section>
         <Section long>
           Go <Accent> as fast as you can </Accent> while being accurate.

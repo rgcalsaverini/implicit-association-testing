@@ -5,7 +5,7 @@ from mongoengine import connect as mongo_connect
 from backend.config import ConfigHandler
 
 
-def connect_mongo(configs, connect=mongo_connect()):
+def connect_mongo(configs, connect=mongo_connect):
     connect(configs.db, host=configs.host)
 
 
