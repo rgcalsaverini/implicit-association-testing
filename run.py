@@ -5,7 +5,7 @@ from flask import send_file
 import os
 
 configs = get_configs()
-connect_mongo(configs)
+connect_mongo(configs.mongo)
 models = create_models()
 app = create_app('TEMP_KEY')
 

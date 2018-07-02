@@ -3,25 +3,23 @@ import React from 'react';
 // import { Redirect } from 'react-router-dom';
 import { Container, ResultCard } from './styles';
 
-const resultText = (resultData) => {
-  const level = resultData.classification;
-  const winner = resultData.winner_name;
-  const looser = resultData.looser_name;
-  const text = resultData.text;
-  return text.replace('$LEVEL', level).replace('$WINNER', winner).replace('$LOSER', looser);
-  // return `Your data suggest a ${level} automatic preference for ${winner} over ${looser}`;
-};
+// const resultText = (resultData) => {
+//   const level = resultData.classification;
+//   const winner = resultData.winner_name;
+//   const looser = resultData.looser_name;
+//   const text = resultData.text;
+//   return text.replace('$LEVEL', level).replace('$WINNER', winner).replace('$LOSER', looser);
+//   // return `Your data suggest a ${level} automatic preference for ${winner} over ${looser}`;
+// };
 
 const Result = (props) => {
   const { resultData } = props;
   const inconclusive = 'It was not possible to determine a result.';
 
-  console.log(resultData, resultData.success)
-
   return (
     <Container>
       <ResultCard>
-        {resultData.success ? resultText(resultData) : inconclusive }
+        {resultData.success ? resultData.text : inconclusive }
       </ResultCard>
     </Container>
 

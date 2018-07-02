@@ -17,8 +17,8 @@ class ConfigHandler(object):
     def add_path(self, path):
         self.default_paths.append(path)
 
-    def _join_path(self, p):
-        return p and os.path.join(p, self.config_path)
+    def _join_path(self, path):
+        return path and os.path.join(path, self.config_path)
 
     def load(self, defaults=None):
         config = defaults or {}
@@ -40,12 +40,6 @@ class ConfigHandler(object):
             pass
 
         return DotDict(config)
-
-    def update(self, values):
-        config = self.load({})
-        config = merge(config, values)
-        with self.open(self.config_path, 'w+') as f:
-            f.write(json.dumps(config))
 
 
 class DotDict(dict):

@@ -4,6 +4,7 @@ from cerberus import Validator
 from flask import Blueprint, session, request
 
 from backend.templates import template_from_file, template_path
+from backend.utils import format_text
 from .router import Router, make_error
 
 result_schema = {
@@ -27,6 +28,7 @@ result_schema = {
         }
     }
 }
+
 
 def separate_groups(groups, template):
     meaning_groups = template.positive_groups + template.negative_groups
@@ -154,12 +156,12 @@ def ui_api(models, configs):
             classification = 'strong'
 
         result = {
-            'winner_id': winner_id,
-            'winner_name': template.groups[winner_id]['name'],
-            'looser_id': looser_id,
-            'looser_name': template.groups[looser_id]['name'],
-            'classification': classification,
-            'text': template.result_text,
+            'text': format_text(
+                template.result_text,
+                looser=template.groups[looser_id]['name'],
+                winner=template.groups[winner_id]['name'],
+                level=classification,
+            ),
             'success': True,
             # 'score': score,
         }
