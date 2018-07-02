@@ -42,3 +42,8 @@ docker push registry.calsaverini.com:5000/iat/app:latest
 - Separate reducers
 - Clean up connections
 - Correct prop types
+
+
+nosetests --with-coverage -v --cover-erase --cover-package=backend --cover-html --cover-branches --cover-html-dir=/tmp 
+
+nosetests -v --with-coverage --cover-erase --cover-package=backend
