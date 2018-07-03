@@ -8,7 +8,6 @@ import { TableContainer, TableRow, GroupCol, ItemCol, TableImage, TableText } fr
 const getGroupNames = groupItems => Object.keys(groupItems).sort();
 
 const getGroupItems = (items, prefix) => items.map((item) => {
-  console.log(item);
   if (item.type === 'text') {
     return <TableText> {item.value} </TableText>;
   }
@@ -68,8 +67,15 @@ const ItemsTable = (props) => {
 };
 
 ItemsTable.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool,
+  prefix: PropTypes.string,
+  groupItems: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-ItemsTable.defaultProps = { };
+ItemsTable.defaultProps = {
+  open: false,
+  prefix: '',
+};
 
 export default ItemsTable;

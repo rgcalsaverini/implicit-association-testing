@@ -3,6 +3,7 @@ import unittest
 from unittest.mock import MagicMock
 
 from backend.config import ConfigHandler, DotDict
+from tests.utils import FakeOpen
 
 
 class TestDotDict(unittest.TestCase):
@@ -83,22 +84,3 @@ def _create_config(**kwargs):
     return ConfigHandler(path, **kwargs)
 
 
-class FakeOpen(object):
-    def __init__(self, value=None):
-        self.value = value
-
-    def __enter__(self, *args):
-        return self
-
-    def __exit__(self, *args):
-        return self
-
-    def __call__(self, path, *args):
-        self.path = path
-        return self
-
-    def read(self, *args):
-        return self.value
-
-    def write(self, value):
-        self.value = value

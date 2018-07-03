@@ -7,9 +7,10 @@ class TemplateError(Exception):
     pass
 
 
-def get_template_resource(configs, template, resource, no_fail=False):
+def get_template_resource(configs, template, resource, no_fail=False,
+                          open=open, isfile=os.path.isfile, ):
     path = template_path(configs, template, resource)
-    if no_fail and not os.path.isfile(path):
+    if no_fail and not isfile(path):
         return None
     with open(path, 'r') as res_file:
         return res_file.read()
@@ -26,9 +27,9 @@ def template_from_file(temp_id, full_path):
     return TestTemplate(temp_id, **info)
 
 
-def shuffle_and_id(item_list):
+def shuffle_and_id(item_list, shuffle_func=random.shuffle):
     indexes = list(range(len(item_list)))
-    random.shuffle(indexes)
+    shuffle_func(indexes)
     return [{**item_list[i], 'idx': n} for n, i in enumerate(indexes)]
 
 
@@ -45,18 +46,6 @@ class TestTemplate(object):
         self.versions = versions
         self.positive_groups = positive_groups
         self.negative_groups = negative_groups
-
-    def basic_data(self):
-        return {
-            'name': self.name,
-            'description': self.description,
-        }
-
-    def to_json(self):
-        return {
-            **self.basic_data(),
-            'versions': [v.to_json() for v in self.versions],
-        }
 
     def _gen_items(self, left, right):
         items = []

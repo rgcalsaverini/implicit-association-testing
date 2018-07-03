@@ -47,7 +47,7 @@ class Task extends Component {
           this.props.categorizeItem(toLeft);
         }
       }
-      if (instructions && keypress === ' ') {
+      if (instructions && !this.state.showTable && keypress === ' ') {
         this.props.startTask();
       }
     };
