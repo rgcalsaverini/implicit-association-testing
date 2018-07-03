@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { spacing, colors, FlexCenter, FlexColCenter, TextHuge } from 'base_styles';
+import { spacing, colors, FlexCenter, FlexColCenter, TextHuge, FlexRow } from 'base_styles';
 
 export const Container = styled.div`
   width: 100%;
@@ -54,14 +54,52 @@ export const ItemImage = styled.img`
   max-height: 225px;
 `;
 
-export const Instructions = styled.div`
-  ${FlexColCenter}
-  // align-items: flex-start;
-  padding: 36px;
+export const InstructionsContainer = styled.div`
+    ${FlexColCenter}
+    padding: 36px;
+    width: 100%;
+    height: 100%;
+    background-color: #FFF;
+    position: absolute;
+`;
+
+export const TableContainer = styled.div`
+    ${FlexRow}
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+`;
+
+export const TableRow = styled.div`
+  box-sizing: border-box;
+  padding: ${spacing.default}px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #AAA;
   width: 100%;
+`;
+
+export const TableImage = styled.img`
   height: 100%;
-  background-color: #FFF;
-  position: absolute;
+  max-height: 50px;
+  padding: ${spacing.default}px;
+`;
+
+export const TableText = styled.span`
+  padding: ${spacing.default}px;
+`;
+
+export const GroupCol = styled.div`
+    ${FlexColCenter}
+    font-weight: 700;
+`;
+
+export const ItemCol = styled.div`
+    ${FlexColCenter}
+    box-sizing: border-box;
+    align-items: flex-start;
+    flex-grow: 1;
 `;
 
 export const Section = styled.div`

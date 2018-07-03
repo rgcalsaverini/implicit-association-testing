@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import constants from 'app_constants';
-import { ItemImage, Anchor, Item, MistakeContainer, Container, Instructions, Accent, Section } from './styles';
+import { ItemImage, Anchor, Item, MistakeContainer, Container } from './styles';
 import MistakeIcon from './MistakeIcon';
+import Instructions from './Instructions';
+import ItemsTable from './ItemsTable';
 
 class Task extends Component {
   static propTypes = {
@@ -15,6 +17,7 @@ class Task extends Component {
     testStarted: PropTypes.bool.isRequired,
     startTest: PropTypes.func.isRequired,
     categorizeItem: PropTypes.func.isRequired,
+    startTask: PropTypes.func.isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
         templateId: PropTypes.string,
@@ -25,6 +28,10 @@ class Task extends Component {
   static defaultProps = {
     match: { params: { templateId: null } },
     hideSide: null,
+  };
+
+  state = {
+    showTable: true,
   };
 
   componentDidMount() {
@@ -90,42 +97,30 @@ class Task extends Component {
     const task = testData.tasks[taskNumber];
     const items = task.items;
     const categText = task.left.length > 1 ? 'categories' : 'category';
+    let instructions;
 
-    const instructions = (
-      <Instructions>
-        <Section long hide={taskNumber > 0}>
-          Put a left finger on the key <Accent> &quot;{constants.leftKey}&quot;</Accent> and
-          a right finger on the key <Accent>&quot;{constants.rightKey}&quot;</Accent>
-        </Section>
-        <Section hide={taskNumber > 0}>
-          Items will appear on the middle of the screen.
-        </Section>
-        <Section>
-          Press &quot;{constants.leftKey}&quot; if the item belongs to the {categText}
-          <Accent> {task.left.join(' or ')} </Accent> or
-        </Section>
-        <Section>
-          press &quot;{constants.rightKey}&quot; if it belongs to the {categText}
-          <Accent> {task.right.join(' or ')} </Accent>
-        </Section>
-        <Section long>
-          If you make a mistake, a red <Accent red> X </Accent> will appear,
-          just try again.
-        </Section>
-        <Section long>
-          Go <Accent> as fast as you can </Accent> while being accurate.
-        </Section>
-        <Section long>
-          Press <Accent> spacebar </Accent> to continue.
-        </Section>
-      </Instructions>
-    );
+
+    if (showInstructions) {
+      instructions = (
+        <Instructions
+          categText={categText}
+          taskNumber={taskNumber}
+          task={task}
+        />
+      );
+    }
 
     return (
       <Container>
         <Anchor>
           {items.map(t => this.renderItem(t))}
-          {showInstructions ? instructions : undefined}
+          {instructions}
+          <ItemsTable
+            open={this.state.showTable}
+            onClose={() => this.setState({ showTable: false })}
+            groupItems={testData.group_items}
+            prefix={testData.img_prefix}
+          />
         </Anchor>
         <MistakeContainer show={mistake}>
           <MistakeIcon fill="#F00" height="100%" />

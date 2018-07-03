@@ -1,7 +1,6 @@
 import json
 import os
 import random
-from math import ceil
 
 
 class TemplateError(Exception):
@@ -59,40 +58,40 @@ class TestTemplate(object):
             'versions': [v.to_json() for v in self.versions],
         }
 
-    def _gen_items(self, num, left, right):
+    def _gen_items(self, left, right):
         items = []
-        print('\n')
         for side, side_items in {'left': left, 'right': right}.items():
-            print(side, num/2)
             for g in side_items:
                 g_items = list(self.groups[g]['items'])
-                g_num = int(ceil(num / (2 * len(side_items))))
-                print('    group ', g, ' should have ', g_num)
-                mult = int(ceil(2 + g_num / len(g_items)))
-                all_items = mult * g_items
-                random.shuffle(all_items)
-                items += [{**i, 'side': side} for i in all_items[:g_num]]
+                items += [{**i, 'side': side} for i in g_items]
         return shuffle_and_id(items)
 
     def random_version(self):
         version_id = random.randrange(len(self.versions))
         version = self.versions[version_id]
         tasks = []
+        groups = []
 
-        for t in version['tasks']:
-            num = 20
-            items = self._gen_items(num, t[0], t[1])
+        for task_side in version['tasks']:
+            groups.extend([*task_side[0], *task_side[1]])
+            items = self._gen_items(task_side[0], task_side[1])
             tasks.append({
-                'left': [self.groups[g]['name'] for g in t[0]],
-                'right': [self.groups[g]['name'] for g in t[1]],
+                'left': [self.groups[g]['name'] for g in task_side[0]],
+                'right': [self.groups[g]['name'] for g in task_side[1]],
                 'items': items
             })
+
+        group_items = {
+            self.groups[g]['name']: self.groups[g]['items']
+            for g in set(groups)
+        }
 
         return {
             'version_id': version_id,
             'tasks': tasks,
             'structure': version['tasks'],
             'name': self.name,
+            'group_items': group_items,
         }
 
     def introduction(self, config):

@@ -2,61 +2,23 @@ version: '3.6'
 
 services:
   backend:
-    image: registry.calsaverini.com:5000/iat/app:${APP_VERSION}
+    image: registry.gitlab.com/rgcalsaverini/iff-iat/app:${APP_VERSION:-latest}
     volumes:
-      - iat-templates:/templates
-    configs:
-      - source: config
-        target: /root/configs.json
-      - source: disclaimer
-        target: /root/disclaimer.md
+      - ${IAT_HOME:-/iat}/templates:/templates
+      - ${IAT_HOME:-/iat}/configs.json:/root/configs.json
+      - ${IAT_HOME:-/iat}/disclaimer.md:/root/disclaimer.md
+    ports:
+      - 80:80
     networks:
-      - web
-      - default
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.iat == 1
-      labels:
-        - "traefik.port=80"
-        - "traefik.docker.network=web"
-        - "traefik.frontend.rule=Host:iat.calsaverini.com"
-
+      - iat_network
 
   mongo:
     image: mongo:3.7
     volumes:
-      - iat-mongo:/data/db
+      - /iat/db:/data/db
     networks:
-      - default
-
-  browserpy:
-    image: registry.calsaverini.com:5000/misc/browsepy:${BROWSEPY_VERSION}
-    volumes:
-      - iat-templates:/files
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.iat == 1
-    ports:
-      - 9267:5050
-
-configs:
-  config:
-    external:
-      name: iat.v${CONFIG_VERSION:-1}
-  disclaimer:
-    external:
-      name: iat_disclaimer.v${DISCLAIMER_VERSION:-1}
-
-volumes:
-  iat-mongo:
-    external: true
-  iat-templates:
-    external: true
+      - iat_network
 
 networks:
-  web:
-    external: true
+    iat_network:
+      driver: bridge
