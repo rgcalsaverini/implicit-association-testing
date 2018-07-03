@@ -22,6 +22,7 @@ const getGroupItems = (items, prefix) => items.map((item) => {
 
 const ItemsTable = (props) => {
   const { open, onClose, groupItems, prefix } = props;
+  const groupNames = getGroupNames(groupItems);
   return (
     <div>
       <Dialog
@@ -50,13 +51,14 @@ const ItemsTable = (props) => {
             These are the groups and the items that belong to each:
           <TableContainer>
             <GroupCol>
-              {getGroupNames(groupItems).map(t => <TableRow key={t}> {t} </TableRow>)}
+              {groupNames.map(t => <TableRow key={t}> {t} </TableRow>)}
             </GroupCol>
             <ItemCol>
-              <TableRow> {getGroupItems(groupItems.Bad, prefix)} </TableRow>
-              <TableRow> {getGroupItems(groupItems.Good, prefix)} </TableRow>
-              <TableRow> {getGroupItems(groupItems['Harry Potter'], prefix)} </TableRow>
-              <TableRow> {getGroupItems(groupItems['Star Wars'], prefix)} </TableRow>
+              {groupNames.map(g => (
+                <TableRow key={g}>
+                  {getGroupItems(groupItems[g], prefix)}
+                </TableRow>
+              ))}
             </ItemCol>
           </TableContainer>
         </div>
