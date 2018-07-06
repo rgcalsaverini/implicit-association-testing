@@ -1,4 +1,3 @@
-import getNow from 'state_management/utils';
 import constants from 'app_constants';
 
 const windowSize = () => {

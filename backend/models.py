@@ -64,9 +64,10 @@ def create_models(me=mongoengine):
         classification = me.StringField()
         winner = me.StringField()
         winner_score = me.FloatField()
+        on_mobile = me.BooleanField()
 
         @staticmethod
-        def new(template, version, user_id):
+        def new(template, version, user_id, mobile):
             now = datetime.datetime.now()
             test = Test(id=uuid4().hex,
                         template=template.id,
@@ -75,7 +76,8 @@ def create_models(me=mongoengine):
                         version=version['version_id'],
                         finished=False,
                         positive_groups=template.positive_groups,
-                        negative_groups=template.negative_groups)
+                        negative_groups=template.negative_groups,
+                        on_mobile=mobile)
             for task in version['structure']:
                 test.structure.create(left=task[0], right=task[1])
             return test.save()

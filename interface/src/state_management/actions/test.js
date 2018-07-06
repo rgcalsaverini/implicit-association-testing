@@ -19,11 +19,12 @@ export const giveConsent = () => (
   }
 );
 
-export const startTest = debouncedAction(500, templateId => (
+export const startTest = debouncedAction(500, (templateId, mobile) => (
   {
     payload: {
       request: {
         method: 'post',
+        ...(typeof mobile === 'undefined' ? {} : { data: { mobile } }),
         url: `/ui-api/tests/${templateId}`,
         withCredentials: true,
       },

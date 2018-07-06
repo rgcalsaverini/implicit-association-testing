@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 import breaks from 'remark-breaks';
+import CircularProgress from 'material-ui/CircularProgress';
 import ReactMarkdown from 'react-markdown';
 import { Container, Text } from './styles';
 
@@ -25,7 +26,7 @@ const Introduction = (props) => {
       getIntro(templateId);
     }
 
-    return <div> Waiting Consent Req </div>;
+    return <CircularProgress size={80} thickness={5} />;
   }
 
   return (

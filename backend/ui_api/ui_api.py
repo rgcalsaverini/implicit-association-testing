@@ -30,6 +30,10 @@ result_schema = {
     }
 }
 
+create_test_schema = {
+    'mobile': {'type': 'boolean', 'required': False},
+}
+
 
 def separate_groups(groups, template):
     meaning_groups = template.positive_groups + template.negative_groups
@@ -85,17 +89,19 @@ def ui_api(models, configs):
 
     router = Router(blueprint, decorator=set_user)
     result_validator = Validator(result_schema)
+    create_test_validator = Validator(create_test_schema)
 
     @router.get('introductions/<string:template_id>')
     @get_template
     def get_intro(template):
         return template.introduction(configs)
 
-    @router.post('tests/<string:template_id>')
+    @router.post('tests/<string:template_id>', validator=create_test_validator)
     @get_template
-    def new_test(template):
+    def new_test(template, data):
         version = template.random_version()
-        test = models.Test.new(template, version, session['user'])
+        mobile = data.get('mobile', None) if data else None
+        test = models.Test.new(template, version, session['user'], mobile)
 
         return {
             **version,

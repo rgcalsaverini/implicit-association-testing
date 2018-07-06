@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colors, FlexCol, FlexCenter, Card } from 'base_styles';
+import { colors, FlexCenter, Card } from 'base_styles';
 
 
 export const Container = styled.div`

@@ -27,9 +27,12 @@ const CellMobile = css`
   top: 0px;
   height: calc(100vh - ${spacing.default * 3}px);
   z-index: 10;
+  transition: background-color ease-in-out 200ms;
+  background-color: rgba(ß, 0, 0, 0.0);
 
   &:active {
-    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color ease-in-out 50ms;
+    background-color: rgba(0, 0, 0, 0.15);
   }
 `;
 

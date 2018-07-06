@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import constants from 'app_constants';
+import CircularProgress from 'material-ui/CircularProgress';
 import { ItemImage, Anchor, Item, MistakeContainer, Container } from './styles';
 import MistakeIcon from './MistakeIcon';
 import Instructions from './Instructions';
@@ -92,9 +93,9 @@ class Task extends Component {
 
     if (!testStarted || !testData) {
       if (!pendingReq) {
-        startTest(templateId);
+        startTest(templateId, small);
       }
-      return <div> Waiting Test start </div>;
+      return <CircularProgress size={80} thickness={5} />;
     }
     const task = testData.tasks[taskNumber];
     const items = task.items;
