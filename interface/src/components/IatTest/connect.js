@@ -7,6 +7,7 @@ const stateToProps = state => ({
   obtainedConsent: state.testReducer.obtainedConsent,
   testData: state.testReducer.testData,
   taskNumber: state.testReducer.taskNumber,
+  small: state.uiReducer.small,
 });
 
 const dispatchToProps = {

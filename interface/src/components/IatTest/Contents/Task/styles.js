@@ -58,9 +58,11 @@ export const InstructionsContainer = styled.div`
     ${FlexColCenter}
     padding: 36px;
     width: 100%;
-    height: 100%;
+    top: ${props => (props.small ? '10px' : '0px')};
+    bottom: ${props => (props.small ? '40px' : '0px')};
     background-color: #FFF;
-    position: absolute;
+    position: ${props => (props.small ? 'fixed' : 'absolute')};
+    z-index: 11;
 `;
 
 export const TableContainer = styled.div`

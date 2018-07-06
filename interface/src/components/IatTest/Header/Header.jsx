@@ -5,7 +5,7 @@ import { Container } from './styles';
 import { Cell } from './';
 
 const Header = (props) => {
-  const { error, testStarted, testData } = props;
+  const { error, testStarted, testData, small } = props;
   const show = !error && testStarted && testData;
 
   if (!show) {
@@ -14,14 +14,18 @@ const Header = (props) => {
 
   return (
     <Container>
-      <Cell left />
-      <Cell />
+      <Cell left small={small} />
+      <Cell small={small} />
     </Container>
   );
 };
 
 Header.propTypes = {
   testStarted: PropTypes.bool.isRequired,
+  small: PropTypes.bool,
 };
 
+Header.defaultProps = {
+  small: false,
+};
 export default Header;

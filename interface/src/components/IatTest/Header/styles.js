@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { spacing, colors, Card, FlexColCenter, FlexRow, TextHuge, TextSmall } from 'base_styles';
+import styled, { css } from 'styled-components';
+import { spacing, colors, Card, FlexColCenter, FlexRow, TextHuge, TextBig, TextSmall } from 'base_styles';
 
 export const Container = styled.div`
   ${FlexRow}
@@ -8,31 +8,52 @@ export const Container = styled.div`
   position: relative;
 `;
 
-export const CellContainer = styled.div`
+
+const CellDesktop = css`
   ${FlexRow}
   justify-content: flex-start;
   width: calc(50% + 50px);
   left: ${props => (props.left ? '-50px' : '50%')};
   top: -50px;
   height: 100px;
+`;
+
+
+const CellMobile = css`
+  ${FlexRow}
+  justify-content: flex-start;
+  width: 50%;
+  left: ${props => (props.left ? '0px' : '50%')};
+  top: 0px;
+  height: calc(100vh - ${spacing.default * 3}px);
+  z-index: 10;
+
+  &:active {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+`;
+
+export const CellContainer = styled.div`
+  ${props => (props.small ? CellMobile : CellDesktop)};
   position: absolute;
 `;
 
 export const GroupContainer = styled.div`
   ${FlexColCenter}
-  ${TextHuge}
+  ${props => (props.small ? TextBig : TextHuge)};
   flex-grow: 1;
   order: ${props => (!props.left && -1) || 2}
   padding: 0px ${spacing.default}px 0px ${spacing.default}px;
   align-items: ${props => (props.left ? 'flex-start' : 'flex-end')};
   justify-content: flex-start;
-  margin-top: 180px;
+  margin-top: ${props => (props.small ? '20px' : '180px')};
   height: 100%;
 `;
 
 export const KeyContainer = styled.div`
   ${Card}
   ${FlexColCenter}
+  ${props => (props.small ? 'display: none;' : '')};
   background-color: ${colors.primary};
   height: 100px;
   width: 100px;

@@ -67,6 +67,10 @@ export const TextHuge = css`
   fontSize: 32px;
 `;
 
+export const TextBig = css`
+  fontSize: 24px;
+`;
+
 export const TextSmall = css`
   fontSize: 12px;
 `;

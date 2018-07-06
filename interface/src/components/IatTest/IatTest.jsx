@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {
@@ -10,41 +10,45 @@ import {
   LowerCell,
   ImgBg,
   LogoIff,
+  LogoIffHeader,
   TopContainer,
 } from './styles';
 import Contents from './Contents';
 import Header from './Header';
 
-const IatTest = (props) => {
-  const { testStarted, error, testData, taskNumber, introData } = props;
 
-  const isTesting = !error && testStarted && testData;
-  let footer;
+class IatTest extends Component {
+  render() {
+    const { testStarted, error, testData, taskNumber, introData, small } = this.props;
+    const isTesting = !error && testStarted && testData;
+    let footer;
 
-  if (isTesting) {
-    footer = <Footer>{`Part ${taskNumber + 1} of ${testData.tasks.length}`}</Footer>;
+    if (isTesting) {
+      footer = <Footer>{`Part ${taskNumber + 1} of ${testData.tasks.length}`}</Footer>;
+    }
+
+    return (
+      <Container>
+        <ImgBg />
+        <TopContainer small={small}>
+          <LogoIff src="/iff.svg" />
+          <TitleContainer>
+            <Subtitle> Implicit Association Testing </Subtitle>
+            <div> {introData && introData.name} </div>
+          </TitleContainer>
+        </TopContainer>
+        <LowerCell small={small}>
+          <Inner small={small} started={testStarted}>
+            <LogoIffHeader src="/iff_lightbg.svg" hide={!small || testStarted} />
+            <Header />
+            <Contents />
+            { footer }
+          </Inner>
+        </LowerCell>
+      </Container>
+    );
   }
-
-  return (
-    <Container>
-      <ImgBg />
-      <TopContainer>
-        <LogoIff src="/iff.svg" />
-        <TitleContainer>
-          <Subtitle> Implicit Association Testing </Subtitle>
-          <div> {introData && introData.name} </div>
-        </TitleContainer>
-      </TopContainer>
-      <LowerCell>
-        <Inner started={testStarted}>
-          <Header />
-          <Contents />
-          { footer }
-        </Inner>
-      </LowerCell>
-    </Container>
-  );
-};
+}
 
 IatTest.propTypes = {
   testStarted: PropTypes.bool.isRequired,

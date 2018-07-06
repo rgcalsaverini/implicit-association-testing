@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getIntro, giveConsent } from 'state_management/actions';
+import { getIntro, giveConsent } from 'state_management/actions/test';
 import Introduction from './Introduction';
 
 const states = state => ({

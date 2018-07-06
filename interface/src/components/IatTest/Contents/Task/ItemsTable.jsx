@@ -9,10 +9,11 @@ const getGroupNames = groupItems => Object.keys(groupItems).sort();
 
 const getGroupItems = (items, prefix) => items.map((item) => {
   if (item.type === 'text') {
-    return <TableText> {item.value} </TableText>;
+    return <TableText key={item.value}> {item.value} </TableText>;
   }
   return (
     <TableImage
+      key={item.value}
       src={`${prefix}${item.value}`}
       alt={item.value}
     />
@@ -22,6 +23,9 @@ const getGroupItems = (items, prefix) => items.map((item) => {
 const ItemsTable = (props) => {
   const { open, onClose, groupItems, prefix } = props;
   const groupNames = getGroupNames(groupItems);
+  if (!open) {
+    return <span />;
+  }
   return (
     <div>
       <Dialog

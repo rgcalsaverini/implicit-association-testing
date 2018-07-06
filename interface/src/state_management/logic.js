@@ -1,4 +1,5 @@
 import { createLogic } from 'redux-logic';
+import constants from 'app_constants';
 import getNow from './utils';
 import { sendResults } from './actions';
 
@@ -11,8 +12,10 @@ const categorizeItem = createLogic({
   process({ getState, action }, dispatch, done) {
     const state = getState().testReducer;
 
-    if (!state.testData) {
+    if (!state.testData || state.showInstructions || !state.testStarted) {
       dispatch({ type: 'CATEGORIZE_ITEM_FAIL', error: true });
+      done();
+      return;
     }
 
     const task = state.testData.tasks[state.taskNumber];
@@ -52,7 +55,7 @@ const categorizeItem = createLogic({
         dispatch(d => (
           window.setTimeout(
             () => d({ type: 'NEXT_ITEM' }),
-            350,
+            constants.wordSwitchDelay,
           )
         ));
       }

@@ -22,13 +22,19 @@ export const ImgBg = styled.div`
 `;
 
 export const LogoIff = styled.img`
-  height: 50px;
   padding-right: calc(15% + 80px);
+  height: 50px;
+`;
+
+export const LogoIffHeader = styled.img`
+  display: ${props => (props.hide ? 'none' : 'block')};
+  width: 100%;
+  max-width: 250px;
 `;
 
 export const LowerCell = styled.div`
   ${FlexCol}
-  height: 80%;
+  height: ${props => (props.small ? '100%' : '80%')};
   width: 100%;
   justify-content: flex-start;
 `;
@@ -36,12 +42,13 @@ export const LowerCell = styled.div`
 export const Inner = styled.div`
   ${FlexCol}
   ${Card}
+  ${props => (props.small ? 'border-radius: 0px;' : '')}
   background-color: #FFF;
   border-top: 8px solid ${colors.primary};
-  width: calc(100% - 100px);
+  width: ${props => (props.small ? '100%' : 'calc(100% - 100px)')};
   max-width: ${maxWidth}px;
   height: 100%;
-  max-height: ${maxHeight}px;
+  max-height: ${props => (props.small ? '100%' : `${maxHeight}px`)};
 `;
 
 export const Footer = styled.div`
@@ -53,10 +60,10 @@ export const Footer = styled.div`
 
 export const TopContainer = styled.div`
   ${FlexRow}
+  display: ${props => (props.small ? 'none' : 'flex')};
   width: 100%;
   height: 20%;
   max-width: ${maxWidth}px;
-  // background-color: red;
   justify-content: center;
 `;
 export const TitleContainer = styled.div`

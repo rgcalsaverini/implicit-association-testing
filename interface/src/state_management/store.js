@@ -7,8 +7,10 @@ import axiosMiddleware from 'redux-axios-middleware';
 import immutable from 'redux-immutable-state-invariant';
 import logic from 'state_management/logic';
 import reducer from 'state_management/reducers';
+import { resizeWindow } from 'state_management/actions/ui';
 import createDebounce from 'redux-debounced';
 
+const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
 const axiosClient = axios.create({
   responseType: 'json',
@@ -23,9 +25,16 @@ const middlewares = [
   thunk,
 ];
 
-if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+if (isDev) {
   middlewares.push(createLogger());
   middlewares.push(immutable());
 }
 
-export default createStore(reducer, applyMiddleware(...middlewares));
+const store = createStore(reducer, applyMiddleware(...middlewares));
+
+if (isDev) {
+  window.store = store;
+}
+
+window.addEventListener('resize', () => store.dispatch(resizeWindow()));
+export default store;

@@ -1,4 +1,4 @@
-import { debouncedAction } from './utils';
+import { debouncedAction } from 'state_management/utils';
 
 export const getIntro = debouncedAction(500, templateId => (
   {

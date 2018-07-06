@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { startTest, categorizeItem, startTask } from 'state_management/actions';
+import { startTest, categorizeItem, startTask } from 'state_management/actions/test';
 import Task from './Task';
 
 const states = state => ({
@@ -13,6 +13,7 @@ const states = state => ({
   mistake: state.testReducer.mistake,
   hideSide: state.testReducer.hideSide,
   showInstructions: state.testReducer.showInstructions,
+  small: state.uiReducer.small,
 });
 
 const dispatches = {

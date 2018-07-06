@@ -18,6 +18,7 @@ class Task extends Component {
     startTest: PropTypes.func.isRequired,
     categorizeItem: PropTypes.func.isRequired,
     startTask: PropTypes.func.isRequired,
+    small: PropTypes.bool,
     match: PropTypes.shape({
       params: PropTypes.shape({
         templateId: PropTypes.string,
@@ -28,6 +29,7 @@ class Task extends Component {
   static defaultProps = {
     match: { params: { templateId: null } },
     hideSide: null,
+    small: false,
   };
 
   state = {
@@ -80,8 +82,8 @@ class Task extends Component {
   };
 
   render() {
-    const { pendingReq, error, testData, taskNumber, mistake } = this.props;
-    const { showInstructions, startTest, testStarted } = this.props;
+    const { pendingReq, error, testData, taskNumber, mistake, startTask } = this.props;
+    const { showInstructions, startTest, testStarted, small } = this.props;
     const templateId = this.props.match.params.templateId;
 
     if (error) {
@@ -96,16 +98,16 @@ class Task extends Component {
     }
     const task = testData.tasks[taskNumber];
     const items = task.items;
-    const categText = task.left.length > 1 ? 'categories' : 'category';
     let instructions;
 
 
     if (showInstructions) {
       instructions = (
         <Instructions
-          categText={categText}
           taskNumber={taskNumber}
           task={task}
+          small={small}
+          onContinue={startTask}
         />
       );
     }

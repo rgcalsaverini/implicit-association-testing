@@ -1,7 +1,6 @@
-import { combineReducers } from 'redux';
-import getNow from './utils';
+import getNow from 'state_management/utils';
 
-const testReducer = (state = {
+const reducer = (state = {
   testStarted: false,
   introData: null,
   testData: null,
@@ -140,6 +139,4 @@ const testReducer = (state = {
   }
 };
 
-export default combineReducers({
-  testReducer,
-});
+export default reducer;
