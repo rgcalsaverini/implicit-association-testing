@@ -1,7 +1,7 @@
 import { createLogic } from 'redux-logic';
 import constants from 'app_constants';
 import getNow from './utils';
-import { sendResults } from './actions';
+import { sendResults } from './actions/test';
 
 const categorizeItem = createLogic({
   type: 'CATEGORIZE_ITEM',
@@ -17,7 +17,6 @@ const categorizeItem = createLogic({
       done();
       return;
     }
-
     const task = state.testData.tasks[state.taskNumber];
     const item = task.items[state.itemNumber];
     const finishedTask = state.itemNumber >= task.items.length - 1;
