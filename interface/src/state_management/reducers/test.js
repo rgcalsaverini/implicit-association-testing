@@ -84,7 +84,6 @@ const reducer = (state = {
         answers: { ...state.answers, start: {} },
       };
     case 'START_QUESTIONNAIRE_2': {
-      console.log('START_QUESTIONNAIRE_2');
       return {
         ...state,
         testState: constants.testStates.quest_2,

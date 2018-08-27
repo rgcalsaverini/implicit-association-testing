@@ -18,7 +18,6 @@ const Contents = (props) => {
     stateRedirect = <Redirect to={`/test/${templateId}/result`} />;
     stateRoute = <Route path="/test/:templateId/result" component={Result} />;
   } else if (testState === constants.testStates.quest_1 || testState === constants.testStates.quest_2) {
-    console.log('testState', testState);
     stateRedirect = <Redirect to={`/test/${templateId}/questionnaire`} />;
     stateRoute = <Route path="/test/:templateId/questionnaire" component={Questionnaire} />;
   } else if (testState === constants.testStates.tasks) {

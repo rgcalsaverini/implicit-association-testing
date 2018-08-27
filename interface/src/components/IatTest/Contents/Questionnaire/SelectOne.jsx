@@ -25,7 +25,6 @@ const SelectOne = ({ data, onChange, value }) => {
       <SelectField
         floatingLabelText="Select one..."
         onChange={(_, key) => {
-          console.log(key);
           onChange(data.options[key]);
         }}
         value={value}

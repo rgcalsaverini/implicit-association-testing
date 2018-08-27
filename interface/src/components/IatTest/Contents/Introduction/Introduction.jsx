@@ -17,7 +17,6 @@ const Introduction = (props) => {
   if (testState !== constants.testStates.intro) {
     return (<Redirect to={`/test/${templateId}`} />);
   }
-  console.log('testData', testData);
   if (testData) {
     giveConsent();
   }

@@ -54,7 +54,6 @@ const changeQuestion = createLogic({
       if (testState.questionnaireId === 'start') {
         dispatch({ type: 'START_TEST' });
       } else if (testState.questionnaireId === 'end') {
-        console.log('sending_results');
         dispatchResults(testState, dispatch);
       }
     } else if (newQuestion >= 0) {
@@ -102,16 +101,15 @@ const categorizeItem = createLogic({
           mistakes: state.curentMistakes,
         };
 
+        dispatch({ type: 'NEXT_TASK', newResult });
+
         if (lastTask) {
           if (state.testData.questionnaire && state.testData.questionnaire.start) {
             dispatch({ type: 'NEXT_TASK', newResult });
             dispatch({ type: 'START_QUESTIONNAIRE_2' });
           } else if (!state.pendingReq) {
-            console.log('sending_results');
             dispatchResults(state, dispatch);
           }
-        } else {
-          dispatch({ type: 'NEXT_TASK', newResult });
         }
       } else {
         dispatch({ type: 'HIDE_ITEM', side, duration });
