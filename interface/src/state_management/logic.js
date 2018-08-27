@@ -3,16 +3,81 @@ import constants from 'app_constants';
 import getNow from './utils';
 import { sendResults } from './actions/test';
 
-const categorizeItem = createLogic({
-  type: 'CATEGORIZE_ITEM',
+const dispatchResults = (state, dispatch) => dispatch(
+  sendResults(
+    state.testData.id,
+    {
+      results: state.results,
+      answers: state.answers,
+    },
+  ),
+);
+
+const consentGiven = createLogic({
+  type: 'GIVE_CONSENT',
+  latest: true,
+  processOptions: {
+    dispatchReturn: false,
+    // dispatchMultiple: true,
+  },
+  process({ getState }, dispatch, done) {
+    const testData = getState().testReducer.testData;
+
+    if (testData.questionnaire && testData.questionnaire.start) {
+      dispatch({ type: 'START_QUESTIONNAIRE_1' });
+    } else {
+      dispatch({ type: 'START_TEST' });
+    }
+    done();
+  },
+});
+
+const changeQuestion = createLogic({
+  type: 'CHANGE_QUESTION_CLICK',
   latest: true,
   processOptions: {
     dispatchReturn: false,
   },
   process({ getState, action }, dispatch, done) {
-    const state = getState().testReducer;
+    const testState = getState().testReducer;
 
-    if (!state.testData || state.showInstructions || !state.testStarted) {
+    if (!testState.testData.questionnaire || !testState.questionnaireId) {
+      dispatch({ type: 'START_TEST' });
+      done();
+      return;
+    }
+
+    const questionnaire = testState.testData.questionnaire[testState.questionnaireId];
+    const activeQuestion = testState.activeQuestion;
+    const newQuestion = activeQuestion + action.value;
+    if (newQuestion >= questionnaire.length) {
+      if (testState.questionnaireId === 'start') {
+        dispatch({ type: 'START_TEST' });
+      } else if (testState.questionnaireId === 'end') {
+        console.log('sending_results');
+        dispatchResults(testState, dispatch);
+      }
+    } else if (newQuestion >= 0) {
+      dispatch({
+        type: 'CHANGE_QUESTION',
+        value: action.value,
+        discardAnswer: action.discardAnswer,
+      });
+    }
+
+    done();
+  },
+});
+
+const categorizeItem = createLogic({
+  type: 'CATEGORIZE_ITEM',
+  latest: true,
+  processOptions: { dispatchReturn: false },
+  process({ getState, action }, dispatch, done) {
+    const state = getState().testReducer;
+    const isTesting = state.testState === constants.testStates.tasks;
+
+    if (!state.testData || state.showInstructions || !isTesting) {
       dispatch({ type: 'CATEGORIZE_ITEM_FAIL', error: true });
       done();
       return;
@@ -20,7 +85,7 @@ const categorizeItem = createLogic({
     const task = state.testData.tasks[state.taskNumber];
     const item = task.items[state.itemNumber];
     const finishedTask = state.itemNumber >= task.items.length - 1;
-    const finishedTest = state.taskNumber >= state.testData.tasks.length - 1;
+    const lastTask = state.taskNumber >= state.testData.tasks.length - 1;
     const side = action.side;
 
     if (item.side !== side) {
@@ -37,14 +102,13 @@ const categorizeItem = createLogic({
           mistakes: state.curentMistakes,
         };
 
-        if (finishedTest) {
-          if (state.pendingReq) {
-            dispatch(
-              sendResults(
-                state.testData.id,
-                { results: [...state.results, newResult] },
-              ),
-            );
+        if (lastTask) {
+          if (state.testData.questionnaire && state.testData.questionnaire.start) {
+            dispatch({ type: 'NEXT_TASK', newResult });
+            dispatch({ type: 'START_QUESTIONNAIRE_2' });
+          } else if (!state.pendingReq) {
+            console.log('sending_results');
+            dispatchResults(state, dispatch);
           }
         } else {
           dispatch({ type: 'NEXT_TASK', newResult });
@@ -66,4 +130,6 @@ const categorizeItem = createLogic({
 
 export default [
   categorizeItem,
+  consentGiven,
+  changeQuestion,
 ];

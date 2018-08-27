@@ -8,6 +8,10 @@ from backend.templates import template_from_file, template_path
 from backend.utils import format_text
 from .router import Router, make_error
 
+answers_schema = {
+    'type': 'dict',
+}
+
 result_schema = {
     'results': {
         'minlength': 1,
@@ -27,6 +31,15 @@ result_schema = {
                 'mistakes': {'type': 'integer'},
             }
         }
+    },
+    'answers': {
+        'type': 'dict',
+        'required': False,
+        'nullable': False,
+        'schema': {
+            'start': answers_schema,
+            'end': answers_schema,
+        },
     }
 }
 
@@ -76,7 +89,7 @@ def ui_api(models, configs):
         def decorated(*args, **kwargs):
             template_id = kwargs['template_id']
             try:
-                path = template_path(configs, template_id)
+                path = template_path(configs.templates.path, template_id)
                 template = template_from_file(template_id, path)
 
             except OSError:
@@ -103,8 +116,16 @@ def ui_api(models, configs):
         mobile = data.get('mobile', None) if data else None
         test = models.Test.new(template, version, session['user'], mobile)
 
+        questionnaire = {}
+
+        for point in ['start', 'end']:
+            quest = template.questionnaire(configs.templates.path, point)
+            if quest:
+                questionnaire[point] = quest
+
         return {
             **version,
+            **({'questionnaire': questionnaire} if questionnaire else {}),
             'img_prefix': '/templates/%s/' % template.id,
             'id': test.id
         }
@@ -113,7 +134,7 @@ def ui_api(models, configs):
     @get_test
     def add_test_result(test, data):
         try:
-            path = template_path(configs, test.template)
+            path = template_path(configs.templates.path, test.template)
             template = template_from_file(test.template, path)
 
         except OSError:
@@ -123,7 +144,7 @@ def ui_api(models, configs):
         measurements = data['results']
 
         result = grade(test, measurements)
-        test.set_result(result, measurements)
+        test.set_result(result, measurements, data.get('answers', None))
 
         return {
             'text': format_text(

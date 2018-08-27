@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import constants from 'app_constants';
+
 import {
   Footer,
   Container,
@@ -18,8 +20,8 @@ import Header from './Header';
 
 
 const IatTest = (props) => {
-  const { testStarted, error, testData, taskNumber, introData, small } = props;
-  const isTesting = !error && testStarted && testData;
+  const { error, testState, testData, taskNumber, introData, small } = props;
+  const isTesting = !error && testState === constants.tasks;
   let footer;
 
   if (isTesting) {
@@ -37,8 +39,8 @@ const IatTest = (props) => {
         </TitleContainer>
       </TopContainer>
       <LowerCell small={small}>
-        <Inner small={small} started={testStarted}>
-          <LogoIffHeader src="/iff_lightbg.svg" hide={!small || testStarted} />
+        <Inner small={small} started={isTesting}>
+          <LogoIffHeader src="/iff_lightbg.svg" hide={!small || isTesting} />
           <Header />
           <Contents />
           { footer }
@@ -49,7 +51,7 @@ const IatTest = (props) => {
 };
 
 IatTest.propTypes = {
-  testStarted: PropTypes.bool.isRequired,
+  testState: PropTypes.number.isRequired,
 };
 
 IatTest.defaultProps = {

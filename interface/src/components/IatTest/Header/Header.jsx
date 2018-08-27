@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import constants from 'app_constants';
+
 import { Nothing } from 'base_styles';
 import { Container } from './styles';
 import { Cell } from './';
 
 const Header = (props) => {
-  const { error, testStarted, testData, small } = props;
-  const show = !error && testStarted && testData;
+  const { error, testState, small } = props;
+  const show = !error && testState === constants.testStates.tasks;
 
   if (!show) {
     return <Nothing />;
@@ -21,7 +23,7 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
-  testStarted: PropTypes.bool.isRequired,
+  testState: PropTypes.number.isRequired,
   small: PropTypes.bool,
 };
 

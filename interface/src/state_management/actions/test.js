@@ -13,25 +13,17 @@ export const getIntro = debouncedAction(500, templateId => (
   }
 ));
 
-export const giveConsent = () => (
-  {
-    type: 'GIVE_CONSENT',
-  }
-);
-
-export const startTest = debouncedAction(500, (templateId, mobile) => (
-  {
-    payload: {
-      request: {
-        method: 'post',
-        ...(typeof mobile === 'undefined' ? {} : { data: { mobile } }),
-        url: `/ui-api/tests/${templateId}`,
-        withCredentials: true,
-      },
+export const getTest = debouncedAction(500, (templateId, mobile) => ({
+  payload: {
+    request: {
+      method: 'post',
+      ...(typeof mobile === 'undefined' ? {} : { data: { mobile } }),
+      url: `/ui-api/tests/${templateId}`,
+      withCredentials: true,
     },
-    type: 'START_TEST',
-  }
-));
+  },
+  type: 'GET_TEST',
+}));
 
 export const categorizeItem = debouncedAction(10, toLeft => (
   {
@@ -43,6 +35,12 @@ export const categorizeItem = debouncedAction(10, toLeft => (
 export const startTask = () => (
   {
     type: 'START_TASK',
+  }
+);
+
+export const giveConsent = () => (
+  {
+    type: 'GIVE_CONSENT',
   }
 );
 
@@ -60,3 +58,18 @@ export const sendResults = debouncedAction(1000, (testId, data) => (
     type: 'SEND_RESULTS',
   }
 ));
+
+export const setAnswer = answer => (
+  {
+    type: 'SET_ANSWER',
+    answer,
+  }
+);
+
+export const changeQuestion = (value, discardAnswer = false) => (
+  {
+    type: 'CHANGE_QUESTION_CLICK',
+    value,
+    discardAnswer,
+  }
+);

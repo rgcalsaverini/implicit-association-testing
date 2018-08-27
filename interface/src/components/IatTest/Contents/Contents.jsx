@@ -1,36 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Redirect, Route } from 'react-router-dom';
+import constants from 'app_constants';
 import Introduction from './Introduction';
 import Task from './Task';
 import Result from './Result';
+import Questionnaire from './Questionnaire';
 
 
 const Contents = (props) => {
-  const { testStarted, obtainedConsent, gotResults } = props;
+  const { testState } = props;
   const templateId = props.match.params.templateId;
-  let introRedirect;
-  let taskRoute;
-  let resultRoute;
-  let resultRedirect;
+  let stateRoute;
+  let stateRedirect;
 
-  if (gotResults) {
-    introRedirect = <Redirect to={`/test/${templateId}/result`} />;
-    resultRoute = <Route path="/test/:templateId/result" component={Result} />;
-  } else if (!testStarted && !obtainedConsent) {
-    resultRedirect = <Redirect to={`/test/${templateId}/consent`} />;
-  }
-  if (obtainedConsent) {
-    taskRoute = <Route path="/test/:templateId" component={Task} />;
+  if (testState === constants.testStates.result) {
+    stateRedirect = <Redirect to={`/test/${templateId}/result`} />;
+    stateRoute = <Route path="/test/:templateId/result" component={Result} />;
+  } else if (testState === constants.testStates.quest_1 || testState === constants.testStates.quest_2) {
+    console.log('testState', testState);
+    stateRedirect = <Redirect to={`/test/${templateId}/questionnaire`} />;
+    stateRoute = <Route path="/test/:templateId/questionnaire" component={Questionnaire} />;
+  } else if (testState === constants.testStates.tasks) {
+    stateRoute = <Route path="/test/:templateId" component={Task} />;
+  } else {
+    stateRedirect = <Redirect to={`/test/${templateId}/consent`} />;
+    stateRoute = <Route path="/test/:templateId/consent" component={Introduction} />;
   }
 
   return (
     <Switch>
-      <Route path="/test/:templateId/consent" component={Introduction} />
-      {resultRoute}
-      {resultRedirect}
-      {introRedirect}
-      {taskRoute}
+      {stateRoute}
+      {stateRedirect}
       Error
     </Switch>
   );
@@ -41,9 +42,7 @@ Contents.defaultProps = {
 };
 
 Contents.propTypes = {
-  gotResults: PropTypes.bool.isRequired,
-  testStarted: PropTypes.bool.isRequired,
-  obtainedConsent: PropTypes.bool.isRequired,
+  testState: PropTypes.number.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       templateId: PropTypes.string,

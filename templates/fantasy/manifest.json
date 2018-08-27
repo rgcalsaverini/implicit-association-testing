@@ -6,11 +6,8 @@
       "name": "Star Wars",
       "items": [
         {"type": "text", "value": "Jedi"},
-        {"type": "text", "value": "Star Wars"},
         {"type": "text", "value": "Darth Vader"},
         {"type": "text", "value": "Yoda"},
-        {"type": "text", "value": "Death Star"},
-        {"type": "text", "value": "Lightsaber"},
         {"type": "image", "value": "star_wars.svg"},
         {"type": "image", "value": "sw2.png"}
       ]
@@ -18,12 +15,9 @@
     "hp": {
       "name": "Harry Potter",
       "items": [
-        {"type": "text", "value": "Harry Potter"},
         {"type": "text", "value": "Dumbledore"},
         {"type": "text", "value": "Hogwarts"},
-        {"type": "text", "value": "Magic wand"},
         {"type": "text", "value": "Herminone"},
-        {"type": "text", "value": "Voldemort"},
         {"type": "image", "value": "potter.svg"},
         {"type": "image", "value": "hp2.png"}
       ]
@@ -32,12 +26,8 @@
       "name": "Lord of The Rings",
       "items": [
         {"type": "text", "value": "Hobbit"},
-        {"type": "text", "value": "Gandalf"},
-        {"type": "text", "value": "Elf"},
         {"type": "text", "value": "Frodo"},
         {"type": "text", "value": "Sauron"},
-        {"type": "text", "value": "Rivendell"},
-        {"type": "text", "value": "The One Ring"},
         {"type": "image", "value": "ring.png"},
         {"type": "image", "value": "lotr.svg"}
       ]
@@ -48,11 +38,8 @@
         {"type": "text", "value": "Dumb"},
         {"type": "text", "value": "Failure"},
         {"type": "text", "value": "Rotten"},
-        {"type": "text", "value": "Detest"},
-        {"type": "text", "value": "Nasty"},
         {"type": "text", "value": "Boring"},
         {"type": "text", "value": "Pathetic"},
-        {"type": "text", "value": "Imbecile"},
         {"type": "text", "value": "Ridiculous"}
       ]
     },

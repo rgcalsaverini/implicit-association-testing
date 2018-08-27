@@ -1,7 +1,9 @@
 import getNow from 'state_management/utils';
+import constants from 'app_constants';
+
 
 const reducer = (state = {
-  testStarted: false,
+  testState: constants.testStates.intro,
   introData: null,
   testData: null,
   obtainedConsent: false,
@@ -18,16 +20,14 @@ const reducer = (state = {
   showInstructions: true,
   gotResults: false,
   resultData: null,
+  activeQuestion: null,
+  questionnaireId: null,
+  answers: {},
 }, action) => {
   const response = action.payload || {};
   const errorResponse = (action.error && action.error.response) || {};
 
   switch (action.type) {
-    case 'GIVE_CONSENT':
-      return {
-        ...state,
-        obtainedConsent: true,
-      };
     case 'GET_INTRO':
       return {
         ...state,
@@ -54,26 +54,49 @@ const reducer = (state = {
         pendingReq: false,
         error: errorResponse,
       };
-    case 'START_TEST':
+    case 'GET_TEST':
       return {
         ...state,
         pendingReq: true,
         error: null,
         testData: null,
       };
-    case 'START_TEST_SUCCESS':
+    case 'GET_TEST_SUCCESS':
       return {
         ...state,
-        pendingReq: true,
-        testStarted: true,
+        pendingReq: false,
         testData: response.data,
-        lastWordChange: getNow(),
       };
-    case 'START_TEST_FAIL':
+    case 'START_TEST':
       return {
         ...state,
-        pendingReq: true,
-        testStarted: true,
+        lastWordChange: getNow(),
+        testState: constants.testStates.tasks,
+        questionnaireId: null,
+        activeQuestion: null,
+      };
+    case 'START_QUESTIONNAIRE_1':
+      return {
+        ...state,
+        testState: constants.testStates.quest_1,
+        activeQuestion: 0,
+        questionnaireId: 'start',
+        answers: { ...state.answers, start: {} },
+      };
+    case 'START_QUESTIONNAIRE_2': {
+      console.log('START_QUESTIONNAIRE_2');
+      return {
+        ...state,
+        testState: constants.testStates.quest_2,
+        activeQuestion: 0,
+        questionnaireId: 'end',
+        answers: { ...state.answers, end: {} },
+      };
+    }
+    case 'GET_TEST_FAIL':
+      return {
+        ...state,
+        pendingReq: false,
         error: errorResponse,
       };
     case 'CATEGORY_MISTAKE':
@@ -119,7 +142,6 @@ const reducer = (state = {
         ...state,
         pendingReq: true,
         error: null,
-        testStarted: false,
       };
     case 'SEND_RESULTS_SUCCESS':
       return {
@@ -127,6 +149,7 @@ const reducer = (state = {
         pendingReq: false,
         resultData: response.data,
         gotResults: true,
+        testState: constants.testStates.result,
       };
     case 'SEND_RESULTS_FAIL':
       return {
@@ -134,6 +157,29 @@ const reducer = (state = {
         pendingReq: false,
         error: true,
       };
+    case 'SET_ANSWER': {
+      const answers = { ...state.answers };
+      const qidAnswers = { ...answers[state.questionnaireId] };
+      qidAnswers[state.activeQuestion] = action.answer;
+      answers[state.questionnaireId] = qidAnswers;
+      return {
+        ...state,
+        answers,
+      };
+    }
+    case 'CHANGE_QUESTION': {
+      const answers = { ...state.answers };
+      if (action.discardAnswer) {
+        const qidAnswers = { ...answers[state.questionnaireId] };
+        delete qidAnswers[state.activeQuestion];
+        answers[state.questionnaireId] = qidAnswers;
+      }
+      return {
+        ...state,
+        answers,
+        activeQuestion: state.activeQuestion + action.value,
+      };
+    }
     default:
       return state;
   }

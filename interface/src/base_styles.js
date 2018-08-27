@@ -15,7 +15,7 @@ export const shadow = {
 
 export const colors = {
   primary: '#0075B2',
-  // secondary: '#50514F',
+  secondary: '#50514F',
   light: '#E6F2F7',
   dark: '#50514F',
   textOnPrimary: '#FFF',

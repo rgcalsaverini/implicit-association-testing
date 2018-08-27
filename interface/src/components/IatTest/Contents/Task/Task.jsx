@@ -15,8 +15,6 @@ class Task extends Component {
     pendingReq: PropTypes.bool.isRequired,
     mistake: PropTypes.bool.isRequired,
     showInstructions: PropTypes.bool.isRequired,
-    testStarted: PropTypes.bool.isRequired,
-    startTest: PropTypes.func.isRequired,
     categorizeItem: PropTypes.func.isRequired,
     startTask: PropTypes.func.isRequired,
     small: PropTypes.bool,
@@ -44,7 +42,7 @@ class Task extends Component {
       const transition = this.props.hideSide !== null;
       const instructions = this.props.showInstructions;
 
-      if (!transition && !instructions) {
+      if (!transition && !instructions && !this.state.showTable) {
         if (keypress === constants.leftKey || keypress === constants.rightKey) {
           const toLeft = keypress === constants.leftKey;
           this.props.categorizeItem(toLeft);
@@ -83,20 +81,23 @@ class Task extends Component {
   };
 
   render() {
-    const { pendingReq, error, testData, taskNumber, mistake, startTask } = this.props;
-    const { showInstructions, startTest, testStarted, small } = this.props;
+    const { getTest, pendingReq, error, testData, taskNumber } = this.props;
+    const { showInstructions, small, mistake, startTask } = this.props;
     const templateId = this.props.match.params.templateId;
+
 
     if (error) {
       return <div> Error {JSON.stringify(error)}</div>;
     }
 
-    if (!testStarted || !testData) {
+    if (!testData) {
       if (!pendingReq) {
-        startTest(templateId, small);
+        getTest(templateId, small);
       }
+
       return <CircularProgress size={80} thickness={5} />;
     }
+
     const task = testData.tasks[taskNumber];
     const items = task.items;
     let instructions;

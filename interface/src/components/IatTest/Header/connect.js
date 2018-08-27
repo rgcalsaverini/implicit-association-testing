@@ -12,8 +12,7 @@ const cellStates = state => ({
 });
 
 const headerStates = state => ({
-  testData: state.testReducer.testData,
-  testStarted: state.testReducer.testStarted,
+  testState: state.testReducer.testState,
   error: state.testReducer.error,
 });
 

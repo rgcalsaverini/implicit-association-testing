@@ -65,6 +65,7 @@ def create_models(me=mongoengine):
         winner = me.StringField()
         winner_score = me.FloatField()
         on_mobile = me.BooleanField()
+        questionnaire = me.DictField(required=False)
 
         @staticmethod
         def new(template, version, user_id, mobile):
@@ -82,7 +83,7 @@ def create_models(me=mongoengine):
                 test.structure.create(left=task[0], right=task[1])
             return test.save()
 
-        def set_result(self, results, measurements):
+        def set_result(self, results, measurements, questionnaire=None):
             self.finished = True
             self.winner = results['winner']
             self.winner_score = results['score']
@@ -90,6 +91,7 @@ def create_models(me=mongoengine):
             self.measurements.delete()
             for mes in measurements:
                 self.measurements.create(**mes)
+            self.questionnaire = questionnaire or {}
             self.save()
 
     return ModelsContainer(User, Test)

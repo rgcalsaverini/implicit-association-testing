@@ -20,6 +20,11 @@ injectGlobal`
 const muiTheme = getMuiTheme({
   palette: {
     primary1Color: colors.primary,
+    primary2Color: colors.primary,
+    primary3Color: colors.primary,
+    accent1Color: colors.secondary,
+    accent2Color: colors.secondary,
+    accent3Color: colors.secondary,
     alternateTextColor: colors.textOnPrimary,
   },
 });

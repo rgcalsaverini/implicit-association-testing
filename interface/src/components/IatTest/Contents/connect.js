@@ -3,10 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Contents from './Contents';
 
 const states = state => ({
-  obtainedConsent: state.testReducer.obtainedConsent,
-  testStarted: state.testReducer.testStarted,
-  gotResults: state.testReducer.gotResults,
-  error: state.testReducer.error,
+  testState: state.testReducer.testState,
 });
 
 const dispatches = {};

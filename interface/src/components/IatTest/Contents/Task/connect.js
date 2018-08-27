@@ -1,10 +1,9 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { startTest, categorizeItem, startTask } from 'state_management/actions/test';
+import { getTest, categorizeItem, startTask } from 'state_management/actions/test';
 import Task from './Task';
 
 const states = state => ({
-  testStarted: state.testReducer.testStarted,
   pendingReq: state.testReducer.pendingReq,
   testData: state.testReducer.testData,
   taskNumber: state.testReducer.taskNumber,
@@ -17,7 +16,7 @@ const states = state => ({
 });
 
 const dispatches = {
-  startTest,
+  getTest,
   categorizeItem,
   startTask,
 };

@@ -7,18 +7,18 @@ class TemplateError(Exception):
     pass
 
 
-def get_template_resource(configs, template, resource, no_fail=False,
+def get_template_resource(path, template, resource, no_fail=False,
                           open=open, isfile=os.path.isfile, ):
-    path = template_path(configs, template, resource)
+    path = template_path(path, template, resource)
     if no_fail and not isfile(path):
         return None
     with open(path, 'r') as res_file:
         return res_file.read()
 
 
-def template_path(configs, template, resource=None):
+def template_path(path, template, resource=None):
     filename = resource or 'manifest.json'
-    return os.path.join(configs.templates.path, template, filename)
+    return os.path.join(path, template, filename)
 
 
 def template_from_file(temp_id, full_path):
@@ -84,9 +84,10 @@ class TestTemplate(object):
         }
 
     def introduction(self, config):
+        path = config.templates.path
         disclaimers = config.disclaimers
-        presentation = get_template_resource(config, self.id, 'intro.md')
-        disc = get_template_resource(config, self.id, 'disclaimer.md', True)
+        presentation = get_template_resource(path, self.id, 'intro.md')
+        disc = get_template_resource(path, self.id, 'disclaimer.md', True)
 
         if os.path.isfile(disclaimers.path):
             with open(disclaimers.path, 'r') as disc_file:
@@ -106,3 +107,10 @@ class TestTemplate(object):
             'button': consent_button,
             'name': self.name,
         }
+
+    def questionnaire(self, path, point):
+        resource = 'q_%s.json' % point
+        conf = get_template_resource(path, self.id, resource, no_fail=True)
+        if not conf:
+            return conf
+        return json.loads(conf)

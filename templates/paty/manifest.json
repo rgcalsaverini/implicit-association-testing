@@ -1,60 +1,62 @@
 {
-  "name": "Paty's Test",
-  "description": "...",
+  "name": "IFF - IAT",
+  "description": "Test your gender bias",
   "groups": {
-    "neg": {
-      "name": "Bad",
+    "male": {
+      "name": "Male",
       "items": [
-        {"type": "text", "value": "Dumb"},
-        {"type": "text", "value": "Failure"},
-        {"type": "text", "value": "Rotten"},
-        {"type": "text", "value": "Detest"},
-        {"type": "text", "value": "Nasty"},
-        {"type": "text", "value": "Boring"},
-        {"type": "text", "value": "Pathetic"},
-        {"type": "text", "value": "Imbecile"},
-        {"type": "text", "value": "Ridiculous"}
+        {"type": "text", "value": "Ben"},
+        {"type": "text", "value": "Paul"},
+        {"type": "text", "value": "Daniel"},
+        {"type": "text", "value": "John"},
+        {"type": "text", "value": "Jeffrey"}
+      ]
+    },
+    "female": {
+      "name": "Female",
+      "items": [
+        {"type": "text", "value": "Rebecca"},
+        {"type": "text", "value": "Michelle"},
+        {"type": "text", "value": "Emily"},
+        {"type": "text", "value": "Julia"},
+        {"type": "text", "value": "Anna"}
+      ]
+    },
+    "neg": {
+      "name": "Arts",
+      "items": [
+        {"type": "text", "value": "Sculpture"},
+        {"type": "text", "value": "Drama"},
+        {"type": "text", "value": "Craft"},
+        {"type": "text", "value": "Painting"},
+        {"type": "text", "value": "Melody"}
       ]
     },
     "pos": {
-      "name": "Good",
+      "name": "Computer Science",
       "items": [
-        {"type": "text", "value": "Great"},
-        {"type": "text", "value": "Fantastic"},
-        {"type": "text", "value": "Interesting"},
-        {"type": "text", "value": "Exciting"},
-        {"type": "text", "value": "Brilliant"},
-        {"type": "text", "value": "Good"}
-      ]
-    },
-    "food": {
-      "name": "Food",
-      "items": [
-        {"type": "text", "value": "Beef"},
-        {"type": "text", "value": "Cheese"},
-        {"type": "text", "value": "Pasta"},
-        {"type": "text", "value": "Chocolate"}
-      ]
-    },
-    "drink": {
-      "name": "Drink",
-      "items": [
-        {"type": "text", "value": "Coca"},
-        {"type": "text", "value": "Wine"},
-        {"type": "text", "value": "Water"},
-        {"type": "text", "value": "Beer"}
+        {"type": "text", "value": "Programming"},
+        {"type": "text", "value": "Technology"},
+        {"type": "text", "value": "Code"},
+        {"type": "text", "value": "Mathematics"},
+        {"type": "text", "value": "Eletronics"}
       ]
     }
   },
-
-    "positive_groups": ["pos"],
-    "negative_groups": ["neg"],
-    "versions": [
-      {
-        "tasks": [
-          [["pos", "food"], ["neg", "drink"]],
-          [["drink", "pos"], ["food", "neg"]]
-        ]
-      }
-    ]
+  "positive_groups": ["pos"],
+  "negative_groups": ["neg"],
+  "result_text": "Your data suggest a $LEVEL automatic association for $WINNER with Computer Science and $LOSER with Arts.",
+  "versions": [
+    {
+      "tasks": [
+        [["male"], ["female"]],
+        [["pos"], ["neg"]],
+        [["male", "pos"], ["female", "neg"]],
+        [["male", "pos"], ["female", "neg"]],
+        [["female"], ["male"]],
+        [["female", "pos"], ["male", "neg"]],
+        [["female", "pos"], ["male", "neg"]]
+      ]
+    }
+  ]
 }
