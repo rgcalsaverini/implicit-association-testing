@@ -21,7 +21,7 @@ class TestGetTemplateResource(unittest.TestCase):
     def test_exists(self):
         configs = DotDict({'templates': {'path': '/my_path'}})
         fake_open = FakeOpen('contents')
-        get_template_resource(configs, 'my_template', 'my_res',
+        get_template_resource(configs.templates.path, 'my_template', 'my_res',
                               open=fake_open, isfile=lambda *a: True)
 
         self.assertEqual(fake_open.path, '/my_path/my_template/my_res')
@@ -29,7 +29,7 @@ class TestGetTemplateResource(unittest.TestCase):
     def test_can_fail(self):
         configs = DotDict({'templates': {'path': '/my_path'}})
         fake_open = FailOpen()
-        res = get_template_resource(configs, 'my_template', 'my_res',
+        res = get_template_resource(configs.templates.path, 'my_template', 'my_res',
                                     no_fail=True, open=fake_open,
                                     isfile=lambda *a: False)
         self.assertIsNone(res)
@@ -38,7 +38,7 @@ class TestGetTemplateResource(unittest.TestCase):
         configs = DotDict({'templates': {'path': '/my_path'}})
         fake_open = FailOpen()
         with self.assertRaises(FileNotFoundError):
-            get_template_resource(configs, 'my_template', 'my_res',
+            get_template_resource(configs.templates.path, 'my_template', 'my_res',
                                   open=fake_open, isfile=lambda *a: False)
 
 
