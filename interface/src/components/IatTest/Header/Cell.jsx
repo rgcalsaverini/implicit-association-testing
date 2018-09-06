@@ -5,6 +5,10 @@ import { CellContainer, GroupContainer, InlineThin, KeyContainer, Key, KeySmall,
 
 const Cell = (props) => {
   const { left, testData, taskNumber, small, categorizeItem } = props;
+
+  if (!testData.tasks[taskNumber]) {
+    return <span />;
+  }
   const groups = testData.tasks[taskNumber][left ? 'left' : 'right'];
   const orSep = <InlineThin left={left}> OR </InlineThin>;
   const keyVal = left ? constants.leftKey : constants.rightKey;

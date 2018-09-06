@@ -13,11 +13,19 @@ const reducer = (state = {
   small: windowSize().width < constants.mobileWidth,
 }, action) => {
   switch (action.type) {
-    case 'RESIZE_WINDOW':
+    case 'RESIZE_WINDOW': {
+      const width = Math.max(
+        document.documentElement.clientWidth,
+        document.body.scrollWidth,
+        document.documentElement.scrollWidth,
+        document.body.offsetWidth,
+        document.documentElement.offsetWidth,
+      );
       return {
         ...state,
-        small: windowSize().width < constants.mobileWidth,
+        small: width < constants.mobileWidth,
       };
+    }
     default:
       return state;
   }

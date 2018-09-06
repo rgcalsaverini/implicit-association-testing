@@ -85,7 +85,6 @@ class Task extends Component {
     const { showInstructions, small, mistake, startTask } = this.props;
     const templateId = this.props.match.params.templateId;
 
-
     if (error) {
       return <div> Error {JSON.stringify(error)}</div>;
     }
@@ -99,8 +98,15 @@ class Task extends Component {
     }
 
     const task = testData.tasks[taskNumber];
+
+    if (!task) {
+      return <span />;
+    }
+
     const items = task.items;
     let instructions;
+
+
 
 
     if (showInstructions) {

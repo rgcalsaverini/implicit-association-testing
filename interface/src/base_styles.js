@@ -64,15 +64,15 @@ export const FixedFill = css`
 `;
 
 export const TextHuge = css`
-  fontSize: 32px;
+  font-size: 32px;
 `;
 
 export const TextBig = css`
-  fontSize: 24px;
+  font-size: 24px;
 `;
 
 export const TextSmall = css`
-  fontSize: 12px;
+  font-size: 12px;
 `;
 
 export const Nothing = styled.span`

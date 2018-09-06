@@ -1,9 +1,26 @@
 [
-
+  {
+    "title": "Rank the following characters in order of preference",
+    "id": "sw_char_ranking",
+    "type": "drag_columns",
+    "options": ["Han Solo", "Luke Skywalker", "Leia Organa", "Chewbacca", "Asoka Tano"],
+    "randomize": true,
+    "mustAnswerAll": true,
+    "canDragBack": false
+  },
+  {
+    "title": "Lorem ipsum sig dolor amet?",
+    "id": "lorem",
+    "type": "matrix",
+    "mustAnswerAll": true,
+    "cols": ["None", "Once", "Up to five", "From five to ten", "Over ten"],
+    "rows": ["Banana", "Rock", "Robot", "Farm", "Pickles", "Cave"]
+  },
   {
     "title": "What was the best Star Wars trilogy?",
     "id": "sw_trilogy",
     "type": "select_one",
+    "acceptCustom": true,
     "options": [
       "Episode I to III",
       "Episode IV to VI",
@@ -14,6 +31,7 @@
     "title": "Who is your favourite Star Wars character?",
     "id": "sw_character",
     "type": "select_one",
+    "acceptCustom": true,
     "options": [
       "2-1B",
       "4-LOM",

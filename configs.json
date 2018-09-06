@@ -3,7 +3,7 @@
     "path": "templates"
   },
   "mongo": {
-    "db": "devt4",
+    "db": "devt5",
     "host": "localhost"
   },
   "disclaimers":{

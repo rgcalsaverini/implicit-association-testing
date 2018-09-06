@@ -4,7 +4,7 @@ export default {
   wordSwitchDelay: 350, // In ms
   mobileWidth: 800,
   questions: {
-    selectWrapLimit: 5,
+    selectWrapLimit: 11,
   },
   testStates: Object.freeze({
     intro: 1,

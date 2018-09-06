@@ -23,6 +23,7 @@ const reducer = (state = {
   activeQuestion: null,
   questionnaireId: null,
   answers: {},
+  questionReady: false,
 }, action) => {
   const response = action.payload || {};
   const errorResponse = (action.error && action.error.response) || {};
@@ -161,9 +162,11 @@ const reducer = (state = {
       const qidAnswers = { ...answers[state.questionnaireId] };
       qidAnswers[state.activeQuestion] = action.answer;
       answers[state.questionnaireId] = qidAnswers;
+      const questionAnswered = typeof qidAnswers[state.activeQuestion] !== 'undefined';
       return {
         ...state,
         answers,
+        questionReady: typeof action.ready !== 'undefined' ? action.ready : questionAnswered,
       };
     }
     case 'CHANGE_QUESTION': {
@@ -176,6 +179,7 @@ const reducer = (state = {
       return {
         ...state,
         answers,
+        questionReady: false,
         activeQuestion: state.activeQuestion + action.value,
       };
     }

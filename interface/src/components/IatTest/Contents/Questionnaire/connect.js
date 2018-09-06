@@ -10,6 +10,7 @@ const states = state => ({
   testData: state.testReducer.testData,
   answers: state.testReducer.answers,
   pendingReq: state.testReducer.pendingReq,
+  questionReady: state.testReducer.questionReady,
   small: state.uiReducer.small,
 
 });

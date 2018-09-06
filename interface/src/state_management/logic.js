@@ -3,15 +3,23 @@ import constants from 'app_constants';
 import getNow from './utils';
 import { sendResults } from './actions/test';
 
-const dispatchResults = (state, dispatch) => dispatch(
-  sendResults(
-    state.testData.id,
-    {
-      results: state.results,
-      answers: state.answers,
-    },
-  ),
-);
+const dispatchResults = (state, dispatch, newResult=false) => {
+  const results = [...state.results];
+
+  if(newResult) {
+    results.push(newResult);
+  }
+
+  dispatch(
+    sendResults(
+      state.testData.id,
+      {
+        results: results,
+        answers: state.answers,
+      },
+    ),
+  );
+};
 
 const consentGiven = createLogic({
   type: 'GIVE_CONSENT',
@@ -101,15 +109,15 @@ const categorizeItem = createLogic({
           mistakes: state.curentMistakes,
         };
 
-        dispatch({ type: 'NEXT_TASK', newResult });
-
         if (lastTask) {
           if (state.testData.questionnaire && state.testData.questionnaire.start) {
             dispatch({ type: 'NEXT_TASK', newResult });
             dispatch({ type: 'START_QUESTIONNAIRE_2' });
           } else if (!state.pendingReq) {
-            dispatchResults(state, dispatch);
+            dispatchResults(state, dispatch, newResult);
           }
+        } else {
+          dispatch({ type: 'NEXT_TASK', newResult });
         }
       } else {
         dispatch({ type: 'HIDE_ITEM', side, duration });

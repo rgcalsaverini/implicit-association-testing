@@ -59,10 +59,11 @@ export const sendResults = debouncedAction(1000, (testId, data) => (
   }
 ));
 
-export const setAnswer = answer => (
+export const setAnswer = (answer, ready) => (
   {
     type: 'SET_ANSWER',
     answer,
+    ready,
   }
 );
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import constants from 'app_constants';
 import PropTypes from 'prop-types';
-import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
 
@@ -9,18 +8,21 @@ import { Redirect } from 'react-router-dom';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import { Container, QuestionTitle, QuestionBody, StepperContainer } from './styles';
 import SelectOne from './SelectOne';
+import Matrix from './Matrix';
+import DragColumns from './DragColumns';
 
 const questionTypes = {
   select_one: SelectOne,
+  matrix: Matrix,
+  drag_columns: DragColumns,
 };
 
 const Questionnaire = (props) => {
   const { testData, pendingReq, testState, activeQuestion, questionnaireId } = props;
-  const { answers, setAnswer, changeQuestion, small, getTest } = props;
+  const { answers, setAnswer, changeQuestion, small, getTest, questionReady } = props;
   const templateId = props.match.params.templateId;
   const questionnaire = testData.questionnaire[questionnaireId];
   const question = questionnaire[activeQuestion];
-  const questionAnswered = typeof answers[questionnaireId][activeQuestion] !== 'undefined';
 
   if (testState !== constants.testStates.quest_1 && testState !== constants.testStates.quest_2) {
     return (<Redirect to={`/test/${templateId}`} />);
@@ -76,12 +78,11 @@ const Questionnaire = (props) => {
           icon={<i className="material-icons" >navigate_next</i>}
           labelPosition="before"
           primary
-          disabled={!questionAnswered}
+          disabled={!questionReady}
           onClick={() => changeQuestion(1)}
         />
       </div>
     </Container>
-
   );
 };
 

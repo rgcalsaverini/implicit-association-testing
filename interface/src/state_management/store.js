@@ -36,5 +36,5 @@ if (isDev) {
   window.store = store;
 }
 
-window.addEventListener('resize', () => store.dispatch(resizeWindow()));
+window.onresize = () => store.dispatch(resizeWindow());
 export default store;
