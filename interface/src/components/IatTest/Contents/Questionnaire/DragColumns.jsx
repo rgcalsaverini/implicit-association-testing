@@ -12,6 +12,7 @@ const reorder = (array, from, to) => {
 const cardinals = {
   0: 'st',
   1: 'nd',
+  2: 'rd',
 };
 
 const unsortedListId = 'unsorted_list';
@@ -122,7 +123,7 @@ class DragColumns extends Component {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <DragItemOrder> {`${index + 1}${cardinals[index] || 'rd'}`}</DragItemOrder>
+                        <DragItemOrder> {`${index + 1}${cardinals[index] || 'th'}`}</DragItemOrder>
                         {option}
                       </DragItem>
                     )}

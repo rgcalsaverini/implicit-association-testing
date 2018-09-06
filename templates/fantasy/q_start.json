@@ -6,15 +6,15 @@
     "options": ["Han Solo", "Luke Skywalker", "Leia Organa", "Chewbacca", "Asoka Tano"],
     "randomize": true,
     "mustAnswerAll": true,
-    "canDragBack": false
+    "canDragBack": true
   },
   {
     "title": "Lorem ipsum sig dolor amet?",
     "id": "lorem",
     "type": "matrix",
     "mustAnswerAll": true,
-    "cols": ["None", "Once", "Up to five", "From five to ten", "Over ten"],
-    "rows": ["Banana", "Rock", "Robot", "Farm", "Pickles", "Cave"]
+    "rows": ["None", "Once", "Up to five", "From five to ten", "Over ten", "One", "Lorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsumoremupsumoremupsumoremupsumoremupsumoremupsumoremupsumoremupsumorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsum", "A", "B", "C", "D", "E", "F", "G"],
+    "cols": ["Banana", "Rock", "Robot", "Farm", "Pickles", "Cave"]
   },
   {
     "title": "What was the best Star Wars trilogy?",

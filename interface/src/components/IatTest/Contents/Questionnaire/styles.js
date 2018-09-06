@@ -4,7 +4,7 @@ import { colors, FlexCol, FlexRow } from 'base_styles';
 export const Container = styled.div`
   ${FlexCol}
   height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
   width: 100%;
   align-items: center;
 `;
@@ -27,6 +27,7 @@ export const QuestionBody = styled.div`
   flex-grow: 1;
   width: 100%;
   box-sizing: border-box;
+  overflow-x: auto;
 `;
 
 export const OtherField = styled.div`
@@ -59,7 +60,9 @@ export const MatrixRadioCell = styled.div`
 `;
 
 export const MatrixLabelCell = styled.div`
-  width: 20%;
+  width: 25%;
+  overflow: hidden;
+  word-break: break-all;
 `;
 
 export const DragBoard = styled.div`
