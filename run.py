@@ -4,7 +4,7 @@ from uuid import uuid4
 from flask import send_file
 
 from backend.models import create_models
-from backend.ui_api import ui_api
+from backend.api import ui_api, result_api
 from backend.utils import get_configs, connect_mongo, create_app
 
 configs = get_configs()
@@ -13,6 +13,7 @@ models = create_models()
 app = create_app(configs.get('secret_key', uuid4().hex))
 
 app.register_blueprint(ui_api(models, configs))
+app.register_blueprint(result_api(models, configs))
 
 if __name__ == '__main__':
     @app.route('/templates/<path:path>')

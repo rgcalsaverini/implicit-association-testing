@@ -6,8 +6,12 @@
     "db": "devt5",
     "host": "localhost"
   },
-  "disclaimers":{
+  "disclaimers": {
     "path": "disclaimer.md",
     "consent_button": "I wish to proceed"
+  },
+  "access_credentials": {
+    "path": "/tmp/iat_access_token",
+    "duration_s": 3600
   }
 }
