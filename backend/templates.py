@@ -11,7 +11,7 @@ def all_templates(path, get_one):
     templates = list()
 
     for res in os.walk(path):
-        subdir = res[0].split('/')
+        subdir = [r for r in res[0].split('/') if r]
         manifest_path = os.path.join(res[0], 'manifest.json')
         if len(subdir) != 2 or not os.path.isfile(manifest_path):
             continue
