@@ -85,15 +85,17 @@ class DragColumns extends Component {
         <DragBoard>
           <Droppable droppableId={unsortedListId}>
             {(provided, snapshot) => (
-              <DragColumn left innerRef={provided.innerRef}>
+              <DragColumn active={snapshot.isDraggingOver} innerRef={provided.innerRef}>
                 {this.state.unsorted.map((option, index) => (
                   <Draggable key={option} draggableId={option} index={index}>
-                    {(provided, snapshot) => (
+                    {(innerProvided, innerSnapshot) => (
                       <DragItem
-                        innerRef={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
+                        innerRef={innerProvided.innerRef}
+                        {...innerProvided.draggableProps}
+                        {...innerProvided.dragHandleProps}
+                        dragging={innerSnapshot.isDragging}
                       >
+                        {console.log(snapshot)}
                         { option }
                       </DragItem>
                     )}
@@ -110,7 +112,7 @@ class DragColumns extends Component {
 
           <Droppable droppableId={sortedListId}>
             {(provided, snapshot) => (
-              <DragColumn innerRef={provided.innerRef}>
+              <DragColumn active={snapshot.isDraggingOver} innerRef={provided.innerRef}>
                 {(value || []).map((option, index) => (
                   <Draggable
                     key={`uns_${option}`}

@@ -1,9 +1,18 @@
 import datetime
+import time
 from ipaddress import ip_address
 # from random import shuffle
 from uuid import uuid4
 
 import mongoengine
+
+
+def output_datetime(datetime_val):
+    return {
+        'iso': datetime_val.isoformat(),
+        'unix': time.mktime(datetime_val.timetuple()),
+        'tuple': datetime_val.timetuple(),
+    }
 
 
 class ModelsContainer(object):
@@ -41,6 +50,12 @@ def create_models(me=mongoengine):
             ip = [req.environ.get(e) for e in environs] + [req.remote_addr]
             user = User(id=uuid4().hex, created_at=now, ip=ip[0])
             return user.save()
+
+        def json(self):
+            return {
+                'id': self.id,
+                'created_at': output_datetime(self.created_at),
+            }
 
     class TaskMeasurement(me.EmbeddedDocument):
         duration = me.FloatField(required=True)
@@ -93,5 +108,27 @@ def create_models(me=mongoengine):
                 self.measurements.create(**mes)
             self.questionnaire = questionnaire or {}
             self.save()
+
+        def json(self, full):
+            basic_data = {
+                'id': self.id,
+                'template': self.template,
+                'user': self.user.id,
+                'created_at': output_datetime(self.created_at),
+                'finished': self.finished,
+                'classification': self.classification,
+                'winner': self.winner,
+            }
+            full_data = {
+                'version': self.version,
+                'structure': self.structure,
+                'positive_groups': self.positive_groups,
+                'negative_groups': self.negative_groups,
+                'measurements': self.measurements,
+                'winner_score': self.finished,
+                'on_mobile': self.on_mobile,
+                'questionnaire': self.questionnaire,
+            }
+            return {**basic_data, **(full_data if full else {})}
 
     return ModelsContainer(User, Test)
