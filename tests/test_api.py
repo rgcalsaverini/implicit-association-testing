@@ -51,7 +51,7 @@ class IatTest(UITestCase):
         app = create_suite_app(lambda *_: FakeTemplate())
         result = post(app, '/ui-api/tests/a', {})
         self.assertEqual(result.status_code, 200)
-        self.assertEqual(len(models.Test.objects.all()), 1)
+        self.assertEqual(len(list(models.Test.objects.all())), 1)
 
     def test_results_400_empty(self):
         app = create_suite_app(lambda *_: FakeTemplate())
