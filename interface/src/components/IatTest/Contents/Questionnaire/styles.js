@@ -78,10 +78,11 @@ export const DragBoard = styled.div`
 
 export const DragColumn = styled.div`
   ${FlexCol}
+  box-sizing: border-box;
   align-items: flex-start;
   justify-content: flex-start;
-  background-color: ${props => (props.active ? '#F0F0F0' : 'transparent')};
-  border: 1px dashed #BBB;
+  background-color: ${props => (props.active ? '#F5F5F5' : 'transparent')};
+  border: 1px ${props => (props.active ? 'solid' : 'dashed')} #BBB;
   flex-grow: 1;
   padding: 12px;
   height: 100%;
@@ -92,22 +93,26 @@ export const DragColumn = styled.div`
 
 export const DragColumnMiddle = styled.div`
   ${FlexCol}
-  height: 100%;
+  box-sizing: border-box;
+  height: calc(100% - 40px);
   width: 100px;
   margin: 40px -6px 0px -6px;
 `;
 
 export const DragItem = styled.div`
   ${FlexRow}
+  box-sizing: border-box;
   border-radius: 6px;
   padding: 4px;
   margin: 4px;
   background-color: #deedf4;
   font-size: 18px;
+  opacity: ${props => (props.dragging ? '0.66' : '1')};
 `;
 
 export const DragItemOrder = styled.div`
   ${FlexCol}
+  box-sizing: border-box;
   margin-right: 8px;
   font-size: 14px;
   opacity: 0.7;

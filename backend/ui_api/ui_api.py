@@ -14,7 +14,7 @@ answers_schema = {
 
 result_schema = {
     'results': {
-        'minlength': 1,
+        'minlength': 2,
         'type': 'list',
         'required': True,
         'nullable': False,
@@ -48,22 +48,7 @@ create_test_schema = {
 }
 
 
-def separate_groups(groups, template):
-    meaning_groups = template.positive_groups + template.negative_groups
-
-    if groups[0] in meaning_groups:
-        object_group = groups[1]
-        positive = groups[0] in template.positive_groups
-    elif groups[1] in meaning_groups:
-        object_group = groups[0]
-        positive = groups[1] in template.positive_groups
-    else:
-        raise ValueError()
-
-    return object_group, positive
-
-
-def ui_api(models, configs):
+def ui_api(models, configs, make_template=template_from_file):
     blueprint = Blueprint('ui-api', __name__, url_prefix='/ui-api')
 
     def set_user(f, *args, **kwargs):
@@ -90,7 +75,7 @@ def ui_api(models, configs):
             template_id = kwargs['template_id']
             try:
                 path = template_path(configs.templates.path, template_id)
-                template = template_from_file(template_id, path)
+                template = make_template(template_id, path)
 
             except OSError:
                 msg = "Template '%s' not found" % template_id
@@ -135,7 +120,7 @@ def ui_api(models, configs):
     def add_test_result(test, data):
         try:
             path = template_path(configs.templates.path, test.template)
-            template = template_from_file(test.template, path)
+            template = make_template(test.template, path)
 
         except OSError:
             msg = "Template '%s' not found" % test.template
