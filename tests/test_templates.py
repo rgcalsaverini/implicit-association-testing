@@ -1,7 +1,7 @@
 import unittest
 
 from backend.config import DotDict
-from backend.templates import get_template_resource, shuffle_and_id, \
+from backend.templates import get_resource, shuffle_and_id, \
     TestTemplate as Template
 from tests.utils import FakeOpen
 
@@ -21,25 +21,25 @@ class TestGetTemplateResource(unittest.TestCase):
     def test_exists(self):
         configs = DotDict({'templates': {'path': '/my_path'}})
         fake_open = FakeOpen('contents')
-        get_template_resource(configs.templates.path, 'my_template', 'my_res',
-                              open=fake_open, isfile=lambda *a: True)
+        get_resource(configs.templates.path, 'my_template', 'my_res',
+                     open=fake_open, isfile=lambda *a: True)
 
         self.assertEqual(fake_open.path, '/my_path/my_template/my_res')
 
     def test_can_fail(self):
         configs = DotDict({'templates': {'path': '/my_path'}})
         fake_open = FailOpen()
-        res = get_template_resource(configs.templates.path, 'my_template', 'my_res',
-                                    no_fail=True, open=fake_open,
-                                    isfile=lambda *a: False)
+        res = get_resource(configs.templates.path, 'my_template', 'my_res',
+                           no_fail=True, open=fake_open,
+                           isfile=lambda *a: False)
         self.assertIsNone(res)
 
     def test_not_found(self):
         configs = DotDict({'templates': {'path': '/my_path'}})
         fake_open = FailOpen()
         with self.assertRaises(FileNotFoundError):
-            get_template_resource(configs.templates.path, 'my_template', 'my_res',
-                                  open=fake_open, isfile=lambda *a: False)
+            get_resource(configs.templates.path, 'my_template', 'my_res',
+                         open=fake_open, isfile=lambda *a: False)
 
 
 class TestShuffleAndId(unittest.TestCase):

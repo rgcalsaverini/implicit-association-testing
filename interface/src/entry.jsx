@@ -6,6 +6,8 @@ import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import IatTest from 'components/IatTest';
+import Login from 'components/Login';
+import AdminPanel from 'components/AdminPanel';
 import { store } from 'state_management';
 import { colors } from 'base_styles';
 
@@ -36,6 +38,8 @@ export default function () {
         <MuiThemeProvider muiTheme={muiTheme}>
           <Switch>
             <Route path="/test/:templateId" component={IatTest} />
+            <Route path="/admin" component={AdminPanel} />
+            <Route path="/login" component={Login} />
           </Switch>
         </MuiThemeProvider>
       </Provider>

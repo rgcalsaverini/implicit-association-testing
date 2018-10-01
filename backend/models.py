@@ -65,6 +65,17 @@ def create_models(me=mongoengine):
         left = me.ListField(me.StringField(), required=True)
         right = me.ListField(me.StringField(), required=True)
 
+    class Admin(me.Document):
+        active_at = me.DateTimeField(default=datetime.datetime.utcnow)
+        user_id = me.StringField(required=True)
+        name = me.StringField(required=True)
+
+        meta = {
+            'indexes': [
+                {'fields': ['active_at'], 'expireAfterSeconds': 86400}
+            ]
+        }
+
     class Test(me.Document):
         id = me.StringField(primary_key=True)
         template = me.StringField(required=True)
@@ -131,4 +142,4 @@ def create_models(me=mongoengine):
             }
             return {**basic_data, **(full_data if full else {})}
 
-    return ModelsContainer(User, Test)
+    return ModelsContainer(User, Test, Admin)

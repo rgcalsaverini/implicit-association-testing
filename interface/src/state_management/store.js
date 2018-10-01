@@ -12,11 +12,23 @@ import createDebounce from 'redux-debounced';
 
 const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
+const interceptError = (_, error) => {
+  if (error.response) {
+    const status = error.response.status;
+    if (status === 401) {
+      document.location.pathname = 'login';
+    }
+  }
+  return Promise.reject(error);
+};
+
 const axiosClient = axios.create({
   responseType: 'json',
 });
 
-const axiosMiddlewareConfig = {};
+const axiosMiddlewareConfig = {
+  interceptors: { response: [{ error: interceptError }] },
+};
 
 const middlewares = [
   createDebounce(),

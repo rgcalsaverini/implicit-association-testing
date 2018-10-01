@@ -127,8 +127,9 @@ class Router(object):
         }
 
         if validator:
-            schema = dict(validator.schema)
-            self.routes[full_rule][method]['parameters'] = schema
+            schema = getattr(validator, 'schema', None)
+            if schema:
+                self.routes[full_rule][method]['parameters'] = dict(schema)
 
     def route(self, rule_path, method, to_json=True, validator=None):
         """
