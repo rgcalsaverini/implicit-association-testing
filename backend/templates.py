@@ -1,6 +1,7 @@
 import json
 import os
 import random
+from collections import OrderedDict
 
 
 class TemplateError(Exception):
@@ -42,7 +43,7 @@ def template_path(path, template, resource=None):
 def template_from_file(temp_id, full_path):
     with open(full_path, 'r') as template_file:
         info = json.loads(template_file.read())
-    return TestTemplate(temp_id, **info)
+    return TestTemplate(temp_id, info)
 
 
 def shuffle_and_id(item_list, shuffle_func=random.shuffle):
@@ -52,18 +53,19 @@ def shuffle_and_id(item_list, shuffle_func=random.shuffle):
 
 
 class TestTemplate(object):
-    def __init__(self, id, name, description, versions, groups,
-                 positive_groups, negative_groups, result_text,
-                 consent_button=None):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.groups = groups
-        self.result_text = result_text
-        self.consent_button = consent_button
-        self.versions = versions
-        self.positive_groups = positive_groups
-        self.negative_groups = negative_groups
+    def __init__(self, temp_id, data):
+        self.id = temp_id
+        if data.get('file_version', 1) == 1:
+            self.name = data['name']
+            self.description = data['description']
+            self.groups = data['groups']
+            self.result_text = data['result_text']
+            self.consent_button = data.get('consent_button')
+            self.versions = data['versions']
+            self.positive_groups = data['positive_groups']
+            self.negative_groups = data['negative_groups']
+        else:
+            raise ValueError('Invalid version')
 
     def _gen_items(self, left, right):
         items = []
@@ -131,4 +133,9 @@ class TestTemplate(object):
         conf = get_resource(path, self.id, resource, no_fail=True)
         if not conf:
             return conf
-        return json.loads(conf)
+        conf_dict = json.loads(conf)
+        questionnaire = OrderedDict([
+            (q['id'], {**q, 'index': i})for i, q in enumerate(conf_dict)
+        ])
+        questionnaire['__IDS'] = list(questionnaire.keys())
+        return questionnaire

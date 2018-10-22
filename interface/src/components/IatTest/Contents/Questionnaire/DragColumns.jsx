@@ -21,6 +21,7 @@ const sortedListId = 'sorted_list';
 class DragColumns extends Component {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
+    formatter: PropTypes.func.isRequired,
     value: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     data: PropTypes.shape({
       title: PropTypes.string.isRequired,
@@ -78,7 +79,7 @@ class DragColumns extends Component {
   }
 
   render() {
-    const { onChange, value, data } = this.props;
+    const { onChange, value, data, formatter } = this.props;
 
     return (
       <DragDropContext onDragEnd={this.handleDragEnd}>
@@ -95,8 +96,7 @@ class DragColumns extends Component {
                         {...innerProvided.dragHandleProps}
                         dragging={innerSnapshot.isDragging}
                       >
-                        {console.log(snapshot)}
-                        { option }
+                        { formatter(option) }
                       </DragItem>
                     )}
                   </Draggable>
@@ -126,7 +126,7 @@ class DragColumns extends Component {
                         {...provided.dragHandleProps}
                       >
                         <DragItemOrder> {`${index + 1}${cardinals[index] || 'th'}`}</DragItemOrder>
-                        {option}
+                        {formatter(option)}
                       </DragItem>
                     )}
                   </Draggable>

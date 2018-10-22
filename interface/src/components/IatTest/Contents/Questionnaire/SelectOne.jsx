@@ -44,7 +44,7 @@ class SelectOne extends Component {
 
   render() {
     let body;
-    const { data, value } = this.props;
+    const { data, value, formatter } = this.props;
 
     if (data.options.length < constants.questions.selectWrapLimit) {
       body = (
@@ -54,7 +54,7 @@ class SelectOne extends Component {
           valueSelected={this.state.otherSelected ? otherOptVal : value}
         >
           {data.options.map(opt => (
-            <RadioButton key={`${opt}_${data.id}`} value={opt} label={opt} />
+            <RadioButton key={`${opt}_${data.id}`} value={opt} label={formatter(opt)} />
           ))}
           {data.acceptCustom ? (
             <RadioButton
@@ -84,7 +84,7 @@ class SelectOne extends Component {
             []
           )}
           {data.options.map(opt => (
-            <MenuItem value={opt} key={opt} primaryText={opt} />
+            <MenuItem value={formatter(opt)} key={opt} primaryText={opt} />
           ))}
         </SelectField>
       );
@@ -108,6 +108,7 @@ class SelectOne extends Component {
 SelectOne.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  formatter: PropTypes.func.isRequired,
   data: PropTypes.shape({
     title: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,

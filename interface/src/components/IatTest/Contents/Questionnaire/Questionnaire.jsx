@@ -10,6 +10,7 @@ import { Container, QuestionTitle, QuestionBody, StepperContainer } from './styl
 import SelectOne from './SelectOne';
 import Matrix from './Matrix';
 import DragColumns from './DragColumns';
+import GenFormatter from './utils';
 
 const questionTypes = {
   select_one: SelectOne,
@@ -18,11 +19,17 @@ const questionTypes = {
 };
 
 const Questionnaire = (props) => {
-  const { testData, pendingReq, testState, activeQuestion, questionnaireId } = props;
-  const { answers, setAnswer, changeQuestion, small, getTest, questionReady } = props;
+  const { testData, pendingReq, testState, activeQuestion, getTest } = props;
+  const { answers, setAnswer, changeQuestion, small, questionReady, questionnaireId } = props;
   const templateId = props.match.params.templateId;
   const questionnaire = testData.questionnaire[questionnaireId];
   const question = questionnaire[activeQuestion];
+  const StringFormatter = GenFormatter({
+    answers,
+    questionnaireId,
+    title: question.title,
+  })
+
 
   if (testState !== constants.testStates.quest_1 && testState !== constants.testStates.quest_2) {
     return (<Redirect to={`/test/${templateId}`} />);
@@ -39,15 +46,17 @@ const Questionnaire = (props) => {
   return (
     <Container>
       <StepperContainer>
-        <Stepper linear={false} activeStep={activeQuestion}>
-          {questionnaire.map(q => (
-            <Step key={q.id}>
+        <Stepper linear={false} activeStep={question.index}>
+          {Object.keys(questionnaire).map(q => (
+            <Step key={q}>
               <StepLabel />
             </Step>
           ))}
         </Stepper>
       </StepperContainer>
-      <QuestionTitle>{activeQuestion + 1}. {question.title}</QuestionTitle>
+      <QuestionTitle>
+        {question.index + 1}. {StringFormatter(question.title)}
+      </QuestionTitle>
       <QuestionBody> {
         React.createElement(
           questionTypes[question.type],
@@ -55,18 +64,18 @@ const Questionnaire = (props) => {
             data: question,
             onChange: setAnswer,
             value: answers[questionnaireId][activeQuestion],
+            formatter: StringFormatter,
           },
         )
       } </QuestionBody>
       <div>
-
         <FlatButton
           label="Previous"
           icon={<i className="material-icons">navigate_before</i>}
           labelPosition="after"
           primary
           onClick={() => changeQuestion(-1)}
-          disabled={activeQuestion < 1}
+          disabled={question.index < 1}
         />
         <FlatButton
           label="Skip"
@@ -87,9 +96,16 @@ const Questionnaire = (props) => {
 };
 
 Questionnaire.propTypes = {
+  testData: PropTypes.object,
+  answers: PropTypes.array,
+  pendingReq: PropTypes.bool,
+  questionReady: PropTypes.bool.isRequired,
+  small: PropTypes.bool,
+  getTest: PropTypes.func.isRequired,
+  changeQuestion: PropTypes.func.isRequired,
   testState: PropTypes.number.isRequired,
   questionnaireId: PropTypes.string.isRequired,
-  activeQuestion: PropTypes.number.isRequired,
+  activeQuestion: PropTypes.string.isRequired,
   setAnswer: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -100,6 +116,9 @@ Questionnaire.propTypes = {
 
 Questionnaire.defaultProps = {
   match: { params: { templateId: null } },
+  pendingReq: false,
+  answers: [],
+  small: false,
 };
 
 export default Questionnaire;

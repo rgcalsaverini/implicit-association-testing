@@ -57,17 +57,18 @@ const changeQuestion = createLogic({
 
     const questionnaire = testState.testData.questionnaire[testState.questionnaireId];
     const activeQuestion = testState.activeQuestion;
-    const newQuestion = activeQuestion + action.value;
-    if (newQuestion >= questionnaire.length) {
+    const questionIds = questionnaire.__IDS; // eslint-disable-line no-underscore-dangle
+    const newQuestionIndex = questionIds.indexOf(activeQuestion) + action.value;
+    if (newQuestionIndex >= questionIds.length) {
       if (testState.questionnaireId === 'start') {
         dispatch({ type: 'START_TEST' });
       } else if (testState.questionnaireId === 'end') {
         dispatchResults(testState, dispatch);
       }
-    } else if (newQuestion >= 0) {
+    } else if (newQuestionIndex >= 0) {
       dispatch({
         type: 'CHANGE_QUESTION',
-        value: action.value,
+        newQuestionId: questionIds[newQuestionIndex],
         discardAnswer: action.discardAnswer,
       });
     }

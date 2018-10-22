@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from 'material-ui/Checkbox';
-import { MatrixRow, MatrixRadioCell, MatrixLabelCell } from './styles';
+import { MatrixRow, MatrixRadioCell, MatrixLabelCell, MatrixContainer } from './styles';
 
 class Matrix extends Component {
   state = {
@@ -31,22 +31,24 @@ class Matrix extends Component {
 
 
   render() {
-    const { data, value } = this.props;
+    const { data, value, formatter } = this.props;
 
     return (
-      <div>
+      <MatrixContainer>
         <MatrixRow key="matr_header">
           <MatrixLabelCell />
           {data.cols.map(col => (
             <MatrixRadioCell key={`matr_header_${data.id}_${col}`}>
-              {col}
+              {formatter(col)}
             </MatrixRadioCell>
           ))}
         </MatrixRow>
 
         {data.rows.map(row => (
           <MatrixRow key={`mat_row_${row}_${data.id}`}>
-            <MatrixLabelCell key={`mat_lab_${row}_${data.id}`}>{row}</MatrixLabelCell>
+            <MatrixLabelCell key={`mat_lab_${row}_${data.id}`}>
+              {formatter(row)}
+            </MatrixLabelCell>
             {data.cols.map(col => (
               <MatrixRadioCell key={`cell_${col}_${row}_${data.id}`}>
                 <div>
@@ -59,7 +61,7 @@ class Matrix extends Component {
             ))}
           </MatrixRow>
         ))}
-      </div>
+      </MatrixContainer>
     );
   }
 }
@@ -67,6 +69,7 @@ class Matrix extends Component {
 Matrix.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  formatter: PropTypes.func.isRequired,
   data: PropTypes.shape({
     title: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,

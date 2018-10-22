@@ -4,6 +4,7 @@ import { FixedFill, FlexCenter, shadow, TextBig, TextSmall, spacing } from 'base
 export const Container = styled.div`
   ${FixedFill}
   ${FlexCenter}
+  font-family: 'Roboto', sans-serif;
 `;
 
 export const Card = styled.div`

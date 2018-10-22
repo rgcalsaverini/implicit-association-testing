@@ -227,19 +227,22 @@ def ui_api(models, configs, make_template=template_from_file,
         mobile = data.get('mobile', None) if data else None
         test = models.Test.new(template, version, session['user'], mobile)
 
-        questionnaire = {}
+        questionnaire = dict()
 
         for point in ['start', 'end']:
             quest = template.questionnaire(configs.templates.path, point)
             if quest:
                 questionnaire[point] = quest
 
-        return {
+        test_data = {
             **version,
-            **({'questionnaire': questionnaire} if questionnaire else {}),
             'img_prefix': '/templates/%s/' % template.id,
             'id': test.id
         }
+
+        if questionnaire:
+            test_data['questionnaire'] = questionnaire
+        return test_data
 
     @router.post('tests/<string:test_id>/results', validator=result_validator)
     @get_test

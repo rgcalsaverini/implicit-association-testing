@@ -80,7 +80,7 @@ const reducer = (state = {
       return {
         ...state,
         testState: constants.testStates.quest_1,
-        activeQuestion: 0,
+        activeQuestion: state.testData.questionnaire.start.__IDS[0],
         questionnaireId: 'start',
         answers: { ...state.answers, start: {} },
       };
@@ -88,7 +88,7 @@ const reducer = (state = {
       return {
         ...state,
         testState: constants.testStates.quest_2,
-        activeQuestion: 0,
+        activeQuestion: state.testData.questionnaire.end.__IDS[0],
         questionnaireId: 'end',
         answers: { ...state.answers, end: {} },
       };
@@ -180,7 +180,7 @@ const reducer = (state = {
         ...state,
         answers,
         questionReady: false,
-        activeQuestion: state.activeQuestion + action.value,
+        activeQuestion: action.newQuestionId,
       };
     }
     default:

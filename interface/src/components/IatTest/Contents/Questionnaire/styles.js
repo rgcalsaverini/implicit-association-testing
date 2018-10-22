@@ -40,6 +40,11 @@ export const OtherField = styled.div`
   transition: all ease-in-out ${props => (props.visible ? '200ms' : '0ms')};
 `;
 
+export const MatrixContainer = styled.div`
+  // background: rgba(255, 0, 0, .2);
+  width: 100%;
+`;
+
 export const MatrixRow = styled.div`
   ${FlexRow}
   justify-content: space-between;
@@ -54,13 +59,18 @@ export const MatrixRadioCell = styled.div`
   ${FlexRow}
   justify-content: center;
   align-items: center;
-  width: 100px;
+  flex-grow: 1;
   text-align: center;
-
+  padding: 0px 4px 0px 4px;
+  flex: 1;
+  overflow: hidden;
+  min-width: 80px;
 `;
 
 export const MatrixLabelCell = styled.div`
-  width: 25%;
+  width: 33%;
+  max-width: 400px;
+  min-width: 150px;
   overflow: hidden;
   word-break: break-all;
 `;
@@ -73,7 +83,6 @@ export const DragBoard = styled.div`
   width: 100%;
   padding: 12px;
   flex-grow: 1;
-
 `;
 
 export const DragColumn = styled.div`
