@@ -8,22 +8,24 @@ from backend.templates.validation import validators
 
 
 class TestTemplate(object):
-    def __init__(self, temp_id, data):
-        errors = template_errors(data)
-        if errors:
-            raise TemplateError(errors)
+    def __init__(self, temp_id, raw_data):
+        status, result = template_errors(raw_data)
+        if not status:
+            raise TemplateError(result)
+
         self.id = temp_id
-        self.version = str(data.get('file_version', 1))
+        self.version = str(result.get('file_version', 1))
         if self.version == '1':
-            self.name = data['name']
-            self.description = data.get('description', '')
-            self.groups = data['groups']
-            self.result_text = data['result_text']
-            self.consent_button = data.get('consent_button')
-            self.versions = data['versions']
-            self.positive_groups = data['positive_groups']
-            self.negative_groups = data['negative_groups']
-            self.popup_messages = data.get('popup_messages', {})
+            self.name = result['name']
+            self.description = result.get('description', '')
+            self.groups = result['groups']
+            self.result_text = result['result_text']
+            self.consent_button = result.get('consent_button')
+            self.versions = result['versions']
+            self.positive_groups = result['positive_groups']
+            self.negative_groups = result['negative_groups']
+            self.popup_messages = result.get('popup_messages', {})
+            self.can_skip_questions = result.get('can_skip_questions', True)
         else:
             raise ValueError('Invalid version')
 
@@ -62,6 +64,7 @@ class TestTemplate(object):
             'name': self.name,
             'group_items': group_items,
             'popup_messages': self.popup_messages,
+            'can_skip_questions': self.can_skip_questions,
         }
 
     def introduction(self, config, open=open, isfile=os.path.isfile):
@@ -115,8 +118,8 @@ def template_errors(data):
     version_validator = validators[str(data.get('file_version', '1'))]
     is_valid = version_validator.validate(data)
     if not is_valid:
-        return version_validator.errors
-    return []
+        return False, version_validator.errors
+    return True, version_validator.document
 
 
 def template_from_file(temp_id, full_path):

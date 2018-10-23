@@ -77,11 +77,15 @@ const Questionnaire = (props) => {
           onClick={() => changeQuestion(-1)}
           disabled={question.index < 1}
         />
-        <FlatButton
-          label="Skip"
-          secondary
-          onClick={() => changeQuestion(1, true)}
-        />
+        {testData.can_skip_questions ? (
+          <FlatButton
+            label="Skip"
+            secondary
+            onClick={() => changeQuestion(1, true)}
+          />
+        ) : (
+          []
+        )}
         <FlatButton
           label="Next"
           icon={<i className="material-icons" >navigate_next</i>}

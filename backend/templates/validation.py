@@ -27,6 +27,12 @@ _schema_1 = {
         'required': False,
         'nullable': False,
     },
+    'can_skip_questions': {
+        'type': 'boolean',
+        'required': False,
+        'nullable': False,
+        'default': True,
+    },
     'groups': {
         'type': 'dict',
         'required': True,
