@@ -28,7 +28,7 @@ const Questionnaire = (props) => {
     answers,
     questionnaireId,
     title: question.title,
-  })
+  });
 
 
   if (testState !== constants.testStates.quest_1 && testState !== constants.testStates.quest_2) {
@@ -97,7 +97,7 @@ const Questionnaire = (props) => {
 
 Questionnaire.propTypes = {
   testData: PropTypes.object,
-  answers: PropTypes.array,
+  answers: PropTypes.object,
   pendingReq: PropTypes.bool,
   questionReady: PropTypes.bool.isRequired,
   small: PropTypes.bool,

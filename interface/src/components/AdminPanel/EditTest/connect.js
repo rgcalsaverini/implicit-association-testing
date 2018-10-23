@@ -6,6 +6,7 @@ const stateToProps = state => ({
   testConfig: state.adminReducer.testConfig,
   editingTest: state.adminReducer.editingTest,
   pendingReq: state.adminReducer.pendingReq,
+  saveError: state.adminReducer.saveError,
 });
 
 const dispatchToProps = {

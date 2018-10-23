@@ -79,7 +79,7 @@ class DragColumns extends Component {
   }
 
   render() {
-    const { onChange, value, data, formatter } = this.props;
+    const { value, formatter } = this.props;
 
     return (
       <DragDropContext onDragEnd={this.handleDragEnd}>

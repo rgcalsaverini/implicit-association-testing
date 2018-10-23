@@ -3,67 +3,27 @@ import os
 import random
 from collections import OrderedDict
 
-
-class TemplateError(Exception):
-    pass
-
-
-def all_templates(path, get_one):
-    templates = list()
-
-    for res in os.walk(path):
-        subdir = [r for r in res[0].split('/') if r]
-        manifest_path = os.path.join(res[0], 'manifest.json')
-        if len(subdir) != 2 or not os.path.isfile(manifest_path):
-            continue
-        temp_id = subdir[-1]
-        full_path = template_path(path, temp_id)
-        template = get_one(temp_id, full_path)
-        templates.append({
-            'id': temp_id,
-            'name': template.name
-        })
-    return templates
-
-
-def get_resource(path, template, res, no_fail=False, open=open,
-                 isfile=os.path.isfile, ):
-    path = template_path(path, template, res)
-    if no_fail and not isfile(path):
-        return None
-    with open(path, 'r') as res_file:
-        return res_file.read()
-
-
-def template_path(path, template, resource=None):
-    filename = resource or 'manifest.json'
-    return os.path.join(path, template, filename)
-
-
-def template_from_file(temp_id, full_path):
-    with open(full_path, 'r') as template_file:
-        info = json.loads(template_file.read())
-    return TestTemplate(temp_id, info)
-
-
-def shuffle_and_id(item_list, shuffle_func=random.shuffle):
-    indexes = list(range(len(item_list)))
-    shuffle_func(indexes)
-    return [{**item_list[i], 'idx': n} for n, i in enumerate(indexes)]
+from backend.templates.utils import shuffle_and_id, get_resource
+from backend.templates.validation import validators
 
 
 class TestTemplate(object):
     def __init__(self, temp_id, data):
+        errors = template_errors(data)
+        if errors:
+            raise TemplateError(errors)
         self.id = temp_id
-        if data.get('file_version', 1) == 1:
+        self.version = str(data.get('file_version', 1))
+        if self.version == '1':
             self.name = data['name']
-            self.description = data['description']
+            self.description = data.get('description', '')
             self.groups = data['groups']
             self.result_text = data['result_text']
             self.consent_button = data.get('consent_button')
             self.versions = data['versions']
             self.positive_groups = data['positive_groups']
             self.negative_groups = data['negative_groups']
+            self.popup_messages = data.get('popup_messages', {})
         else:
             raise ValueError('Invalid version')
 
@@ -101,15 +61,18 @@ class TestTemplate(object):
             'structure': version['tasks'],
             'name': self.name,
             'group_items': group_items,
+            'popup_messages': self.popup_messages,
         }
 
-    def introduction(self, config):
+    def introduction(self, config, open=open, isfile=os.path.isfile):
         path = config.templates.path
         disclaimers = config.disclaimers
-        presentation = get_resource(path, self.id, 'intro.md')
-        disc = get_resource(path, self.id, 'disclaimer.md', True)
+        presentation = get_resource(path, self.id, 'intro.md', open=open,
+                                    isfile=isfile)
+        disc = get_resource(path, self.id, 'disclaimer.md', True, open=open,
+                            isfile=isfile)
 
-        if os.path.isfile(disclaimers.path):
+        if isfile(disclaimers.path):
             with open(disclaimers.path, 'r') as disc_file:
                 generic = disc_file.read()
         else:
@@ -128,14 +91,35 @@ class TestTemplate(object):
             'name': self.name,
         }
 
-    def questionnaire(self, path, point):
+    def questionnaire(self, path, point, open=open, isfile=os.path.isfile):
         resource = 'q_%s.json' % point
-        conf = get_resource(path, self.id, resource, no_fail=True)
+        conf = get_resource(path, self.id, resource, no_fail=True,
+                            isfile=isfile, open=open)
         if not conf:
             return conf
         conf_dict = json.loads(conf)
         questionnaire = OrderedDict([
-            (q['id'], {**q, 'index': i})for i, q in enumerate(conf_dict)
+            (q['id'], {**q, 'index': i}) for i, q in enumerate(conf_dict)
         ])
         questionnaire['__IDS'] = list(questionnaire.keys())
         return questionnaire
+
+
+class TemplateError(ValueError):
+    def __init__(self, validation_errors, *args, **kwargs):
+        super(TemplateError, self).__init__(validation_errors, *args, **kwargs)
+        self.validation_errors = validation_errors
+
+
+def template_errors(data):
+    version_validator = validators[str(data.get('file_version', '1'))]
+    is_valid = version_validator.validate(data)
+    if not is_valid:
+        return version_validator.errors
+    return []
+
+
+def template_from_file(temp_id, full_path):
+    with open(full_path, 'r') as template_file:
+        info = json.loads(template_file.read())
+    return TestTemplate(temp_id, info)

@@ -6,7 +6,9 @@ from cerberus import Validator
 from flask import Blueprint, session, request
 
 from backend.grading import grade
-from backend.templates import template_from_file, template_path, \
+from backend.templates.template import template_from_file, TemplateError, \
+    template_errors
+from backend.templates.utils import template_path, \
     all_templates, get_resource
 from backend.utils import format_text
 from .router import Router, make_error
@@ -69,7 +71,7 @@ def update_config_file(file_map, change_flags, namespace_str, value):
         return False
 
     if not namespace:
-        file_map[file_id] = value
+        file_map[file_id] = value['newValue']
         return True
 
     while len(namespace) > 1:
@@ -80,7 +82,11 @@ def update_config_file(file_map, change_flags, namespace_str, value):
     key = namespace.pop()
     if isinstance(file, list):
         key = int(key)
-    file[key] = value
+
+    if 'newValue' in value.keys():
+        file[key] = value['newValue']
+    else:
+        del file[key]
     return True
 
 
@@ -148,6 +154,9 @@ def ui_api(models, configs, make_template=template_from_file,
             except OSError:
                 msg = "Template '%s' not found" % template_id
                 return make_error(msg, 404)
+            except TemplateError as err:
+                msg = err.validation_errors
+                return make_error(msg, 400)
             kwargs.pop('template_id', None)
             return f(*args, template=template, **kwargs)
 
@@ -206,8 +215,14 @@ def ui_api(models, configs, make_template=template_from_file,
             template_id,
             get_resource)
         changed_flags = {k: False for k in files.keys()}
+
         for namespace, value in data['update'].items():
             update_config_file(files, changed_flags, namespace, value)
+
+        if 'manifest' in files.keys() and changed_flags['manifest']:
+            errors = template_errors(files['manifest'])
+            if errors:
+                return make_error(json.dumps(errors, indent=2), 400)
 
         for changed_id in [k for k, v in changed_flags.items() if v]:
             path = template_path(configs.templates.path,

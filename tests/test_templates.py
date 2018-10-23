@@ -1,9 +1,10 @@
 import unittest
 
 from backend.config import DotDict
-from backend.templates import get_resource, shuffle_and_id, \
-    TestTemplate as Template
+from backend.templates.template import TestTemplate as Template, TemplateError
+from backend.templates.utils import get_resource, shuffle_and_id
 from tests.utils import FakeOpen
+import json
 
 
 class FailOpen(object):
@@ -53,11 +54,59 @@ class TestShuffleAndId(unittest.TestCase):
 
 
 class TestTemplate(unittest.TestCase):
-    def test_empty(self):
-        template = Template('id', 'name', 'descr', [{'tasks': []}], [], [], [],
-                            'tx', 'btn')
+    def test_min_1(self):
+        template_data = {
+            'name': 'name',
+            'description': 'description',
+            'groups': {
+                'a': {'name': 'A', 'items': [
+                    {'type': 'text', 'value': 'a.1'},
+                    {'type': 'text', 'value': 'a.2'},
+                ]},
+                'b': {'name': 'B', 'items': [
+                    {'type': 'text', 'value': 'b.1'},
+                    {'type': 'text', 'value': 'b.2'},
+                ]},
+            },
+            'positive_groups': ['a'],
+            'negative_groups': ['b'],
+            'result_text': 'Res',
+            'versions': [{'tasks': [
+                [['a'], ['b']],
+                [['a'], ['b']],
+            ]}],
+        }
+        template = Template('id', template_data)
         template.random_version()
-        # template.introduction(DotDict({
-        #     'disclaimers': {'consent_button': 'my_but'},
-        #     'templates': {'path': '/my_path'},
-        # }))
+        questionnaire = [
+            {'id': 'q1'},
+            {'id': 'q2'},
+            {'id': 'q3'},
+            {'id': 'q4'},
+        ]
+        fake_open = FakeOpen(json.dumps(questionnaire))
+        configs = DotDict({
+            'templates': {'path': '/my_path'},
+            'disclaimers': {'path': 'a', 'consent_button': 'a'},
+        })
+
+        q1 = template.questionnaire('', '', fake_open, isfile=lambda *a: True)
+        self.assertIsNotNone(q1)
+        q2 = template.questionnaire('', '', fake_open, isfile=lambda *a: False)
+        self.assertIsNone(q2)
+
+        intro = template.introduction(configs, open=fake_open, isfile=lambda *a: False)
+        self.assertEqual(json.loads(intro['text']), questionnaire)
+
+        self.assertEquals(template.name, 'name')
+        self.assertEquals(template.description, 'description')
+        self.assertEquals(template.positive_groups, ['a'])
+        self.assertEquals(template.negative_groups, ['b'])
+        self.assertEquals(template.groups['a']['name'], 'A')
+        self.assertEquals(template.groups['b']['name'], 'B')
+        self.assertListEqual(template.versions[0]['tasks'][0], [['a'], ['b']])
+
+    def test_empty(self):
+        with self.assertRaises(TemplateError):
+            Template('id', {})
+

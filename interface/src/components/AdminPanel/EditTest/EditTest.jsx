@@ -15,8 +15,12 @@ class EditTest extends Component {
     changes: {},
   };
 
-  componentWillReceiveProps() {
-    this.setState({ changes: {}, tab: 'manifest' });
+  componentWillReceiveProps(newProps) {
+    if (!newProps.editingTest) {
+      this.setState({ changes: {}, tab: 'manifest' });
+    } else {
+      this.setState({ changes: {} });
+    }
   }
 
   JsonEditor = (source, name) => (
@@ -48,7 +52,7 @@ class EditTest extends Component {
   handleEdit = (fileId, editInfo) => {
     const changes = { ...this.state.changes };
     if (editInfo.namespace) {
-      changes[[fileId, ...editInfo.namespace, editInfo.name]] = editInfo.new_value;
+      changes[[fileId, ...editInfo.namespace, editInfo.name]] = { newValue: editInfo.new_value };
     } else {
       changes[fileId] = editInfo;
     }
@@ -57,17 +61,24 @@ class EditTest extends Component {
 
   handleSave = () => {
     this.props.saveTestConfigs(this.props.editingTest, this.state.changes);
-    this.props.setTestEdit();
   }
 
   render() {
     const {
+      saveError,
       editingTest,
       pendingReq,
       setTestEdit,
       testConfig,
       getTestConfigs,
     } = this.props;
+
+    if (saveError) {
+      console.error('\n\n---------------------------');
+      console.error(saveError);
+      console.error('---------------------------');
+    }
+
     const hasChanges = Object.keys(this.state.changes).length > 0;
     let contents = <CircularProgress size={80} thickness={5} />;
     if (editingTest === null) {
@@ -88,7 +99,7 @@ class EditTest extends Component {
             {this.JsonEditor(testConfig.manifest, 'manifest')}
           </Tab>
           <Tab label="Disclaimer" value="disclaimer">
-            {this.TextAreaEditor(testConfig.disclaimer, 'diclaimer')}
+            {this.TextAreaEditor(testConfig.disclaimer, 'disclaimer')}
           </Tab>
           <Tab label="Introduction" value="intro">
             {this.TextAreaEditor(testConfig.intro, 'intro')}

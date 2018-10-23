@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colors, FlexCol, FlexRow, TextSmall, other, TextBig, shadow, spacing } from 'base_styles';
+import { colors, FlexCol, FlexRow, TextSmall, other, TextBig, spacing } from 'base_styles';
 
 export const Container = styled.div`
 `;

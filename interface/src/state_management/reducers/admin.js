@@ -16,6 +16,10 @@ const dataResult = (action, state, resKey) => {
   };
 };
 
+const errorMsg = action => (
+  (action.error && action.error.response && action.error.response.data && action.error.response.data.error) || {}
+);
+
 const dataFail = (action, state) => {
   const errorResponse = (action.error && action.error.response) || {};
 
@@ -33,9 +37,10 @@ const reducer = (state = {
   editingTest: null,
   pendingReq: false,
   error: null,
+  saveError: null,
 }, action) => {
   switch (action.type) {
-    case 'GET_TEST_LIST': case 'GET_TEST_CONFIGS': case 'GET_USER_ID':
+    case 'GET_TEST_LIST': case 'GET_TEST_CONFIGS': case 'GET_USER_ID': case 'SAVE_TEST_CONFIGS':
       return {
         ...state,
         pendingReq: true,
@@ -49,11 +54,20 @@ const reducer = (state = {
       return dataResult(action, state, 'testConfig');
     case 'GET_TEST_LIST_FAIL': case 'GET_TEST_CONFIGS_FAIL': case 'GET_USER_ID_FAIL':
       return dataFail(action, state);
+    case 'SAVE_TEST_CONFIGS_SUCCESS':
+      return { ...state, pendingReq: false, editingTest: null, saveError: null };
+    case 'SAVE_TEST_CONFIGS_FAIL':
+      return {
+        ...state,
+        pendingReq: false,
+        saveError: errorMsg(action),
+      };
     case 'SET_TEST_EDIT':
       return {
         ...state,
         editingTest: action.templateId,
         testConfig: null,
+        saveError: null,
       };
     default:
       return state;

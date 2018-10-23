@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colors, FlexCol, FlexRow, TextBig, Card, FixedFill, shadow, spacing } from 'base_styles';
+import { colors, FlexCol, FlexRow, TextBig, FixedFill, shadow, spacing } from 'base_styles';
 
 const maxWidth = 930;
 const barHeight = 60;

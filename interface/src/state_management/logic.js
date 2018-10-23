@@ -14,7 +14,7 @@ const dispatchResults = (state, dispatch, newResult=false) => {
     sendResults(
       state.testData.id,
       {
-        results: results,
+        results,
         answers: state.answers,
       },
     ),
@@ -26,7 +26,6 @@ const consentGiven = createLogic({
   latest: true,
   processOptions: {
     dispatchReturn: false,
-    // dispatchMultiple: true,
   },
   process({ getState }, dispatch, done) {
     const testData = getState().testReducer.testData;
