@@ -106,6 +106,7 @@ export const DragColumnMiddle = styled.div`
   height: calc(100% - 40px);
   width: 100px;
   margin: 40px -6px 0px -6px;
+  z-index: 99;
 `;
 
 export const DragItem = styled.div`

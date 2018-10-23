@@ -87,7 +87,7 @@ const Questionnaire = (props) => {
           icon={<i className="material-icons" >navigate_next</i>}
           labelPosition="before"
           primary
-          disabled={!questionReady}
+          disabled={!questionReady[activeQuestion]}
           onClick={() => changeQuestion(1)}
         />
       </div>
@@ -96,10 +96,10 @@ const Questionnaire = (props) => {
 };
 
 Questionnaire.propTypes = {
-  testData: PropTypes.object,
+  testData: PropTypes.object.isRequired,
   answers: PropTypes.object,
   pendingReq: PropTypes.bool,
-  questionReady: PropTypes.bool.isRequired,
+  questionReady: PropTypes.object.isRequired,
   small: PropTypes.bool,
   getTest: PropTypes.func.isRequired,
   changeQuestion: PropTypes.func.isRequired,

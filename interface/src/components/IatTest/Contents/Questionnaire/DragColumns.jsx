@@ -39,7 +39,9 @@ class DragColumns extends Component {
   }
 
   state = {
-    unsorted: this.props.data.options,
+    unsorted: this.props.data.options.filter(e => (
+      !this.props.value || this.props.value.indexOf(e) === -1),
+    ),
     wrongList: false,
   }
 
@@ -96,7 +98,7 @@ class DragColumns extends Component {
                         {...innerProvided.dragHandleProps}
                         dragging={innerSnapshot.isDragging}
                       >
-                        { formatter(option) }
+                        { option }
                       </DragItem>
                     )}
                   </Draggable>
@@ -126,7 +128,7 @@ class DragColumns extends Component {
                         {...provided.dragHandleProps}
                       >
                         <DragItemOrder> {`${index + 1}${cardinals[index] || 'th'}`}</DragItemOrder>
-                        {formatter(option)}
+                        {option}
                       </DragItem>
                     )}
                   </Draggable>
