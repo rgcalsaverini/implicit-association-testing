@@ -3,14 +3,13 @@ import constants from 'app_constants';
 import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
-
+import { GenFormatter, FilterQuestions } from 'utils';
 import { Redirect } from 'react-router-dom';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import { Container, QuestionTitle, QuestionBody, StepperContainer } from './styles';
 import SelectOne from './SelectOne';
 import Matrix from './Matrix';
 import DragColumns from './DragColumns';
-import GenFormatter from './utils';
 
 const questionTypes = {
   select_one: SelectOne,
@@ -24,12 +23,8 @@ const Questionnaire = (props) => {
   const templateId = props.match.params.templateId;
   const questionnaire = testData.questionnaire[questionnaireId];
   const question = questionnaire[activeQuestion];
-  const StringFormatter = GenFormatter({
-    answers,
-    questionnaireId,
-    title: question.title,
-  });
-
+  const templateVars = { answers };
+  const StringFormatter = GenFormatter(templateVars);
 
   if (testState !== constants.testStates.quest_1 && testState !== constants.testStates.quest_2) {
     return (<Redirect to={`/test/${templateId}`} />);
@@ -47,8 +42,8 @@ const Questionnaire = (props) => {
     <Container>
       <StepperContainer>
         <Stepper linear={false} activeStep={question.index}>
-          {Object.keys(questionnaire).map(q => (
-            <Step key={q}>
+          {FilterQuestions(Object.values(questionnaire), templateVars).map(q => (
+            <Step key={q.id}>
               <StepLabel />
             </Step>
           ))}

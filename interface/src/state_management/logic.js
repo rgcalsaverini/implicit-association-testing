@@ -1,12 +1,13 @@
 import { createLogic } from 'redux-logic';
 import constants from 'app_constants';
+import { FilterQuestions } from 'utils';
 import getNow from './utils';
 import { sendResults } from './actions/test';
 
-const dispatchResults = (state, dispatch, newResult=false) => {
+const dispatchResults = (state, dispatch, newResult = false) => {
   const results = [...state.results];
 
-  if(newResult) {
+  if (newResult) {
     results.push(newResult);
   }
 
@@ -55,8 +56,14 @@ const changeQuestion = createLogic({
     }
 
     const questionnaire = testState.testData.questionnaire[testState.questionnaireId];
+    const validIds = FilterQuestions(
+      Object.values(questionnaire),
+      { answers: testState.answers },
+    ).map(q => q.id);
+    /* eslint-disable no-underscore-dangle */
+    const questionIds = questionnaire.__IDS.filter(q => validIds.indexOf(q) >= 0);
+
     const activeQuestion = testState.activeQuestion;
-    const questionIds = questionnaire.__IDS; // eslint-disable-line no-underscore-dangle
     const newQuestionIndex = questionIds.indexOf(activeQuestion) + action.value;
     if (newQuestionIndex >= questionIds.length) {
       if (testState.questionnaireId === 'start') {
