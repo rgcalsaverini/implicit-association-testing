@@ -12,5 +12,6 @@ export default {
     tasks: 3,
     quest_2: 4,
     result: 5,
+    final_info: 6,
   }),
 };

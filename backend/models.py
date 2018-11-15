@@ -1,10 +1,12 @@
 import datetime
+import re
 import time
 from ipaddress import ip_address
-# from random import shuffle
 from uuid import uuid4
 
 import mongoengine
+
+unsafe_key_re = re.compile(r'[^a-zA-Z0-9 ]')
 
 
 def output_datetime(datetime_val):
@@ -13,6 +15,19 @@ def output_datetime(datetime_val):
         'unix': time.mktime(datetime_val.timetuple()),
         'tuple': datetime_val.timetuple(),
     }
+
+
+def sanitize_dict_keys(dictionary):
+    """ Remove weird characters from dict keys """
+    return {unsafe_key_re.sub('', k): v for k, v in dictionary.items()}
+
+
+def cleanup_questionnaire(questionnaire):
+    """ Make sure that the questionnaire is safe for insertion on doc.  """
+    for part, questions in questionnaire.items():
+        for question_id, answer in questions.items():
+            if isinstance(answer, dict):
+                questionnaire[part][question_id] = sanitize_dict_keys(answer)
 
 
 class ModelsContainer(object):
@@ -117,6 +132,8 @@ def create_models(me=mongoengine):
             self.measurements.delete()
             for mes in measurements:
                 self.measurements.create(**mes)
+            if questionnaire:
+                cleanup_questionnaire(questionnaire)
             self.questionnaire = questionnaire or {}
             self.save()
 

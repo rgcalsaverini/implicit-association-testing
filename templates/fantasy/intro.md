@@ -6,6 +6,6 @@ this:
 - One item
 - Another item with *italic text*
 
-And even add images:
+And even add images!
 
 ![alt text](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3SoMJdQ-0Mb2PtZmjno5g9sgBoLMfDywfeekqCxGNpXpSfqGt)

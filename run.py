@@ -1,18 +1,21 @@
 import os
-from uuid import uuid4
 
 from flask import send_file
+from flask_kit import create_app
 
 from backend.models import create_models
 from backend.ui_api import ui_api
-from backend.utils import get_configs, connect_mongo, create_app
+from backend.utils import get_configs, connect_mongo
 
 configs = get_configs()
 connect_mongo(configs.mongo)
 models = create_models()
-app = create_app(configs.get('secret_key', uuid4().hex))
 
-app.register_blueprint(ui_api(models, configs))
+blueprints = [
+    ui_api(models, configs)
+]
+
+app = create_app(configs, blueprints=blueprints, https=False)
 
 if __name__ == '__main__':
     @app.route('/templates/<path:path>')

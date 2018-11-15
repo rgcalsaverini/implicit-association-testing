@@ -74,3 +74,16 @@ export const changeQuestion = (value, discardAnswer = false) => (
     discardAnswer,
   }
 );
+
+export const getFinalInfo = debouncedAction(500, templateId => (
+  {
+    payload: {
+      request: {
+        method: 'get',
+        url: `/ui-api/final-info/${templateId}`,
+        withCredentials: true,
+      },
+    },
+    type: 'GET_FINAL_INFO',
+  }
+));

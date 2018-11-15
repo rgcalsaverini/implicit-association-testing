@@ -6,18 +6,25 @@ import Introduction from './Introduction';
 import Task from './Task';
 import Result from './Result';
 import Questionnaire from './Questionnaire';
+import FinalInfo from './FinalInfo';
 
 
 const Contents = (props) => {
   const { testState } = props;
   const templateId = props.match.params.templateId;
+  const quest1 = constants.testStates.quest_1;
+  const quest2 = constants.testStates.quest_2;
+
   let stateRoute;
   let stateRedirect;
 
-  if (testState === constants.testStates.result) {
+  if (testState === constants.testStates.final_info) {
+    stateRedirect = <Redirect to={`/test/${templateId}/final-info`} />;
+    stateRoute = <Route path="/test/:templateId/final-info" component={FinalInfo} />;
+  } else if (testState === constants.testStates.result) {
     stateRedirect = <Redirect to={`/test/${templateId}/result`} />;
     stateRoute = <Route path="/test/:templateId/result" component={Result} />;
-  } else if (testState === constants.testStates.quest_1 || testState === constants.testStates.quest_2) {
+  } else if (testState === quest1 || testState === quest2) {
     stateRedirect = <Redirect to={`/test/${templateId}/questionnaire`} />;
     stateRoute = <Route path="/test/:templateId/questionnaire" component={Questionnaire} />;
   } else if (testState === constants.testStates.tasks) {

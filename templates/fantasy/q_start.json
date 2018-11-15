@@ -9,12 +9,13 @@
     "canDragBack": true
   },
   {
-    "title": "Lorem ipsum sig dolor amet?",
+    "title": "How would you rank ${this.answers.start.sw_char_ranking[0].split(' ')[0].toUpperCase()}'s skills?",
+    "show_if": "!this.answers.start.sw_char_ranking || this.answers.start.sw_char_ranking[0] != 'Han Solo'",
     "id": "lorem",
     "type": "matrix",
     "mustAnswerAll": true,
-    "rows": ["None", "Once", "Up to five", "From five to ten", "Over ten", "One", "Lorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsumoremupsumoremupsumoremupsumoremupsumoremupsumoremupsumoremupsumorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsum", "A", "B", "C", "D", "E", "F", "G"],
-    "cols": ["Banana", "Rock", "Robot", "Farm", "Pickles", "Cave"]
+    "rows": ["Intelligence ${''}", "Combat skills", "Capacity to use the force", "Something else", "Over ten", "One", "Lorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsumoremupsumoremupsumoremupsumoremupsumoremupsumoremupsumoremupsumorem ipsum sig dolor amet lorem upsumorem ipsum sig dolor amet lorem upsum", "A", "B", "C", "D", "E", "F", "G"],
+    "cols": ["Disastrous ${''}", "Really Bad", "Below average", "Adequate", "Good", "Great"]
   },
   {
     "title": "What was the best Star Wars trilogy?",

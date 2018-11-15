@@ -1,50 +1,42 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
-// import { Redirect } from 'react-router-dom';
-import { Container, ResultCard } from './styles';
+import PropTypes from 'prop-types';
+import RaisedButton from 'material-ui/RaisedButton';
 
-// const resultText = (resultData) => {
-//   const level = resultData.classification;
-//   const winner = resultData.winner_name;
-//   const looser = resultData.looser_name;
-//   const text = resultData.text;
-//   return text.replace('$LEVEL', level).replace('$WINNER', winner).replace('$LOSER', looser);
-//   // return `Your data suggest a ${level} automatic preference for ${winner} over ${looser}`;
-// };
+// import { Redirect } from 'react-router-dom';
+import { Container, ResultCard, ResultTitle, ButtonContainer } from './styles';
 
 const Result = (props) => {
-  const { resultData } = props;
+  const { resultData, getFinalInfo } = props;
   const inconclusive = 'It was not possible to determine a result.';
+  const templateId = props.match.params.templateId;
 
   return (
     <Container>
+      <ResultTitle> Results </ResultTitle>
       <ResultCard>
         {resultData.success ? resultData.text : inconclusive }
       </ResultCard>
+      <ButtonContainer>
+        <RaisedButton
+          label={'Continue'}
+          onClick={() => getFinalInfo(templateId)}
+          primary
+        />
+      </ButtonContainer>
     </Container>
 
   );
 };
 
 Result.propTypes = {
-  // obtainedConsent: PropTypes.bool.isRequired,
-  // introData: PropTypes.shape({
-  //   text: PropTypes.string,
-  //   button: PropTypes.string,
-  // }),
-  // pendingReq: PropTypes.bool.isRequired,
-  // getIntro: PropTypes.func.isRequired,
-  // giveConsent: PropTypes.func.isRequired,
-  // match: PropTypes.shape({
-  //   params: PropTypes.shape({
-  //     templateId: PropTypes.string,
-  //   }),
-  // }),
+  getFinalInfo: PropTypes.func.isRequired,
+  resultData: PropTypes.shape({
+    success: PropTypes.bool,
+    text: PropTypes.string,
+  }).isRequired,
 };
 
 Result.defaultProps = {
-  // introData: null,
-  // match: { params: { templateId: null } },
 };
 
 export default Result;

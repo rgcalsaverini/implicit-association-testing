@@ -24,6 +24,7 @@ const reducer = (state = {
   questionnaireId: null,
   answers: {},
   questionReady: { },
+  finalInfo: null,
 }, action) => {
   const response = action.payload || {};
   const errorResponse = (action.error && action.error.response) || {};
@@ -150,6 +151,12 @@ const reducer = (state = {
         resultData: response.data,
         gotResults: true,
         testState: constants.testStates.result,
+      };
+    case 'GET_FINAL_INFO_SUCCESS':
+      return {
+        ...state,
+        finalInfo: response.data.text,
+        testState: constants.testStates.final_info,
       };
     case 'SEND_RESULTS_FAIL':
       return {

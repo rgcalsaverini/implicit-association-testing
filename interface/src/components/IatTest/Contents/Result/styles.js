@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colors, FlexCenter, Card } from 'base_styles';
+import { colors, FlexCenter, Card, TextHuge, spacing } from 'base_styles';
 
 
 export const Container = styled.div`
@@ -7,7 +7,9 @@ export const Container = styled.div`
   height: 100%;
   overflow-x: hidden;
   width: 100%;
+  justify-content: space-between;
   align-items: center;
+  padding: ${spacing.double * 2}px;
 `;
 
 export const ResultCard = styled.div`
@@ -20,4 +22,13 @@ export const ResultCard = styled.div`
   wdith: 100%;
   color: ${colors.dark}
   background-color: rgba(0, 0, 0, .1);
+`;
+
+export const ResultTitle = styled.div`
+  ${TextHuge}
+  align-self: flex-start;
+`;
+
+export const ButtonContainer = styled.div`
+  align-self: flex-end;
 `;

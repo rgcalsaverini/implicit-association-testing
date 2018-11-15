@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
+import { specialText } from 'utils';
 import FlatButton from 'material-ui/FlatButton';
 // import constants from 'app_constants';
 import { TableContainer, TableRow, GroupCol, ItemCol, TableImage, TableText } from './styles';
+
 
 const getGroupNames = groupItems => Object.keys(groupItems).sort();
 
@@ -26,6 +28,9 @@ const ItemsTable = (props) => {
   if (!open) {
     return <span />;
   }
+
+  specialText('a');
+
   return (
     <div>
       <Dialog
@@ -49,7 +54,7 @@ const ItemsTable = (props) => {
         open={open}
       >
         <div>
-            Next, you will use your computer keys to categorize items
+            Next, you will {specialText('use_what')} to categorize items
             into groups as fast as you can.
             These are the groups and the items that belong to each:
           <TableContainer>
