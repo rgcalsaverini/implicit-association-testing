@@ -32,8 +32,7 @@ RUN apk add --no-cache --virtual build-dependencies \
 	&& echo $TZ > /etc/timezone \
 	&& pip3 install -r ${APP_DIR}/requirements.txt \
 	&& apk del build-dependencies \
-	&& rm -rf /var/lib/apt/lists/* \
-	&& rm /var/cache/apk/*
+	&& rm -rf /var/lib/apt/lists/*
 
 COPY ./deploy/app/startup.sh /usr/bin/startup-uwsgi
 COPY deploy/app/nginx.conf /etc/nginx/conf.d/default.conf
@@ -41,5 +40,4 @@ RUN chmod +x /usr/bin/startup-uwsgi
 COPY deploy/app/uwsgi.ini run.py ${APP_DIR}/
 COPY backend/ ${APP_DIR}/backend/
 COPY --from=npm ${APP_DIR}/build ${APP_DIR}/build
-#COPY configs.json /root/configs.json
 CMD nginx && startup-uwsgi
