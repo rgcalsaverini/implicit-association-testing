@@ -20,7 +20,6 @@ build_images:
   image: docker:stable
   services:
    - docker:dind
-   - alpine/git
   only:
     - master
   script:
@@ -35,7 +34,6 @@ build_release_images:
   image: docker:stable
   services:
    - docker:dind
-   - alpine/git
   only:
     - tags
   script:

@@ -25,11 +25,15 @@ RUN apk add --no-cache --virtual build-dependencies \
 	python3-dev \
 	musl-dev \
 	linux-headers \
+	git \
+	openssh \
 	tzdata \
 	&& cp /usr/share/zoneinfo/$TZ /etc/localtime \
 	&& echo $TZ > /etc/timezone \
 	&& pip3 install -r ${APP_DIR}/requirements.txt \
-	&& apk del build-dependencies
+	&& apk del build-dependencies \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& rm /var/cache/apk/*
 
 COPY ./deploy/app/startup.sh /usr/bin/startup-uwsgi
 COPY deploy/app/nginx.conf /etc/nginx/conf.d/default.conf
