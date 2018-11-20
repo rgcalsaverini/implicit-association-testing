@@ -72,13 +72,12 @@ export const TitleContainer = styled.div`
   padding-bottom: 20px;
   height: 100%;
   min-height: 80px;
-  // width: 100%;
   overflow: hidden;
   font-size: 32px;
   font-weight: 700;
-  // background-color: blue;
   letter-spacing: 6px;
   color: #FFF;
+  letter-spacing: 3px;
 `;
 
 export const Subtitle = styled.div`

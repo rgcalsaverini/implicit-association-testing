@@ -31,9 +31,6 @@ const Questionnaire = (props) => {
   const popupIds = {'start': `before_q_${questionnaireId}`}
   let popupMessage = null;
 
-  console.log(popups, `before_${questionnaireId}`);
-  console.log(popups[`before_${questionnaireId}`]);
-
   if (popups[popupIds.start] && !closedPopups.includes(popupIds.start)) {
     popupMessage = (
       <Dialog open onClose={() => closePopup(popupIds.start)}>
