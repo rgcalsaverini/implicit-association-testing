@@ -3,8 +3,7 @@
   "description": "Test your fantasy bias",
   "file_version": 1,
   "popup_messages": {
-    "before_result": "before_result",
-    "after_result": "after_result"
+    "before_q_start": "before_q_start"
   },
   "can_skip_questions": true,
   "groups": {

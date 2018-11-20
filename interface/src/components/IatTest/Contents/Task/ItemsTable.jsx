@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
+import Dialog from 'components/Dialog';
 import { specialText } from 'utils';
 import FlatButton from 'material-ui/FlatButton';
 // import constants from 'app_constants';
@@ -29,30 +29,9 @@ const ItemsTable = (props) => {
     return <span />;
   }
 
-  specialText('a');
-
   return (
     <div>
-      <Dialog
-        modal
-        actions={[
-          <FlatButton
-            label="Continue"
-            primary
-            onClick={onClose}
-          />,
-        ]}
-        style={{
-          width: '130vw',
-          left: '-15vw',
-        }}
-        contentStyle={{
-          witdh: '100%',
-          maxWidth: '900px',
-          margin: '0 auto',
-        }}
-        open={open}
-      >
+      <Dialog onClose={onClose} open={open}>
         <div>
             Next, you will {specialText('use_what')} to categorize items
             into groups as fast as you can.

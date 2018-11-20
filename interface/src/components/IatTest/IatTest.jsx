@@ -34,7 +34,7 @@ const IatTest = (props) => {
       <TopContainer small={small}>
         <LogoIff src="/iff.svg" />
         <TitleContainer>
-          <Subtitle> Implicit Association Testing </Subtitle>
+          <Subtitle> {introData && introData.main_title} </Subtitle>
           <div> {introData && introData.name} </div>
         </TitleContainer>
       </TopContainer>

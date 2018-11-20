@@ -6,6 +6,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import { GenFormatter, FilterQuestions } from 'utils';
 import { Redirect } from 'react-router-dom';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
+import Dialog from 'components/Dialog';
 import { Container, QuestionTitle, QuestionBody, StepperContainer } from './styles';
 import SelectOne from './SelectOne';
 import Matrix from './Matrix';
@@ -18,13 +19,27 @@ const questionTypes = {
 };
 
 const Questionnaire = (props) => {
-  const { testData, pendingReq, testState, activeQuestion, getTest } = props;
-  const { answers, setAnswer, changeQuestion, small, questionReady, questionnaireId } = props;
+  const { testData, pendingReq, testState, activeQuestion } = props;
+  const { answers, setAnswer, changeQuestion, small, questionReady } = props;
+  const { closePopup, questionnaireId, closedPopups, getTest } = props;
   const templateId = props.match.params.templateId;
   const questionnaire = testData.questionnaire[questionnaireId];
   const question = questionnaire[activeQuestion];
   const templateVars = { answers };
   const StringFormatter = GenFormatter(templateVars);
+  const popups = testData.popup_messages;
+  const popupIds = {'start': `before_q_${questionnaireId}`}
+  let popupMessage = null;
+
+  console.log(popups, `before_${questionnaireId}`);
+  console.log(popups[`before_${questionnaireId}`]);
+
+  if (popups[popupIds.start] && !closedPopups.includes(popupIds.start)) {
+    popupMessage = (
+      <Dialog open onClose={() => closePopup(popupIds.start)}>
+        {popups[popupIds.start]}
+      </Dialog>);
+  }
 
   if (testState !== constants.testStates.quest_1 && testState !== constants.testStates.quest_2) {
     return (<Redirect to={`/test/${templateId}`} />);
@@ -40,6 +55,7 @@ const Questionnaire = (props) => {
 
   return (
     <Container>
+      {popupMessage}
       <StepperContainer>
         <Stepper linear={false} activeStep={question.index}>
           {FilterQuestions(Object.values(questionnaire), templateVars).map(q => (
@@ -95,28 +111,32 @@ const Questionnaire = (props) => {
 };
 
 Questionnaire.propTypes = {
-  testData: PropTypes.object.isRequired,
-  answers: PropTypes.object,
-  pendingReq: PropTypes.bool,
-  questionReady: PropTypes.object.isRequired,
-  small: PropTypes.bool,
-  getTest: PropTypes.func.isRequired,
-  changeQuestion: PropTypes.func.isRequired,
-  testState: PropTypes.number.isRequired,
-  questionnaireId: PropTypes.string.isRequired,
   activeQuestion: PropTypes.string.isRequired,
-  setAnswer: PropTypes.func.isRequired,
+  answers: PropTypes.object,
+  changeQuestion: PropTypes.func.isRequired,
+  closePopup: PropTypes.func.isRequired,
+  closedPopups: PropTypes.arrayOf(PropTypes.string),
+  getTest: PropTypes.func.isRequired,
+  pendingReq: PropTypes.bool,
+  questionnaireId: PropTypes.string.isRequired,
+  questionReady: PropTypes.object.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       templateId: PropTypes.string,
     }),
   }),
+  setAnswer: PropTypes.func.isRequired,
+  small: PropTypes.bool,
+  testData: PropTypes.object.isRequired,
+  testState: PropTypes.number.isRequired,
+
 };
 
 Questionnaire.defaultProps = {
+  answers: [],
+  closedPopups: [],
   match: { params: { templateId: null } },
   pendingReq: false,
-  answers: [],
   small: false,
 };
 

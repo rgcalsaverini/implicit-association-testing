@@ -4,14 +4,14 @@ import { getTest, categorizeItem, startTask } from 'state_management/actions/tes
 import Task from './Task';
 
 const states = state => ({
-  pendingReq: state.testReducer.pendingReq,
-  testData: state.testReducer.testData,
-  taskNumber: state.testReducer.taskNumber,
-  itemNumber: state.testReducer.itemNumber,
   error: state.testReducer.error,
-  mistake: state.testReducer.mistake,
   hideSide: state.testReducer.hideSide,
+  itemNumber: state.testReducer.itemNumber,
+  mistake: state.testReducer.mistake,
+  pendingReq: state.testReducer.pendingReq,
   showInstructions: state.testReducer.showInstructions,
+  taskNumber: state.testReducer.taskNumber,
+  testData: state.testReducer.testData,
   small: state.uiReducer.small,
 });
 

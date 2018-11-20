@@ -4,7 +4,7 @@ from functools import wraps
 
 from flask import Blueprint, session, request
 from flask_kit import Router, BasicAccessControl
-from flask_kit.router import make_error
+from flask_kit.simple_router import make_error
 
 from backend.grading import grade
 from backend.templates.template import template_errors

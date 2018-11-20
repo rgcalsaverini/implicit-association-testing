@@ -1,6 +1,6 @@
 import unittest
 
-from backend.config import DotDict
+from flask_kit.config import DotDict
 from backend.templates.template import TestTemplate as Template, TemplateError
 from backend.templates.utils import get_resource, shuffle_and_id
 from tests.utils import FakeOpen

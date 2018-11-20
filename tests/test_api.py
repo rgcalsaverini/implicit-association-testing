@@ -3,10 +3,10 @@ import unittest
 
 from mongoengine import connect
 
-from backend.config import DotDict
 from backend.models import create_models
 from backend.ui_api import ui_api
-from backend.utils import create_app
+from flask import Flask
+from flask_kit.config import DotDict
 
 configs = DotDict({
     "templates": {
@@ -101,7 +101,8 @@ class FakeTemplate(object):
 
 
 def create_suite_app(*extras):
-    app = create_app('testing')
+    app = Flask(__name__)
+    app.secret_key = 'testing'
     connect('testing', host='mongomock://localhost')
     app.register_blueprint(ui_api(models, configs, *extras))
     app.testing = True

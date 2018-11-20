@@ -3,28 +3,29 @@ import constants from 'app_constants';
 
 
 const reducer = (state = {
-  testState: constants.testStates.intro,
-  introData: null,
-  testData: null,
-  obtainedConsent: false,
-  pendingReq: false,
-  error: null,
-  taskNumber: 0,
-  itemNumber: 0,
-  mistake: false,
+  activeQuestion: null,
+  answers: {},
+  closedPopups: [],
   curentDuration: 0,
   curentMistakes: 0,
-  results: [],
-  lastWordChange: 0,
-  hideSide: null,
-  showInstructions: true,
-  gotResults: false,
-  resultData: null,
-  activeQuestion: null,
-  questionnaireId: null,
-  answers: {},
-  questionReady: { },
+  error: null,
   finalInfo: null,
+  gotResults: false,
+  hideSide: null,
+  introData: null,
+  itemNumber: 0,
+  lastWordChange: 0,
+  mistake: false,
+  obtainedConsent: false,
+  pendingReq: false,
+  questionnaireId: null,
+  questionReady: { },
+  resultData: null,
+  results: [],
+  showInstructions: true,
+  taskNumber: 0,
+  testData: null,
+  testState: constants.testStates.intro,
 }, action) => {
   const response = action.payload || {};
   const errorResponse = (action.error && action.error.response) || {};
@@ -191,6 +192,11 @@ const reducer = (state = {
         activeQuestion: action.newQuestionId,
       };
     }
+    case 'CLOSE_POPUP':
+      return {
+        ...state,
+        closedPopups: [...state.closedPopups, action.popupId],
+      };
     default:
       return state;
   }

@@ -11,12 +11,13 @@ Options:
 import datetime
 
 from docopt import docopt
+from flask_kit import get_configs
+from mongoengine import connect
 
 from backend.models import create_models
-from backend.utils import get_configs, connect_mongo
 
 configs = get_configs()
-connect_mongo(configs.mongo)
+connect(configs.mongo.db, host=configs.mongo.host)
 models = create_models()
 
 if __name__ == '__main__':

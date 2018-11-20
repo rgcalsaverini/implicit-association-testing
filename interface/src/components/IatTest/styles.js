@@ -74,7 +74,7 @@ export const TitleContainer = styled.div`
   min-height: 80px;
   // width: 100%;
   overflow: hidden;
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 700;
   // background-color: blue;
   letter-spacing: 6px;

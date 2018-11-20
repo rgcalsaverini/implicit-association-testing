@@ -14,7 +14,7 @@ FROM nginx:alpine
 ENV APP_DIR /app
 ENV TEMPLATES_DIR  /templates
 ENV TZ=America/Sao_Paulo
-RUN mkdir -p ${APP_DIR} ${TPD_DIR}
+RUN mkdir -p ${APP_DIR}
 
 RUN apk add --no-cache python3 uwsgi uwsgi-python3 iputils
 
@@ -37,7 +37,7 @@ RUN apk add --no-cache --virtual build-dependencies \
 COPY ./deploy/app/startup.sh /usr/bin/startup-uwsgi
 COPY deploy/app/nginx.conf /etc/nginx/conf.d/default.conf
 RUN chmod +x /usr/bin/startup-uwsgi
-COPY deploy/app/uwsgi.ini run.py ${APP_DIR}/
+COPY deploy/app/uwsgi.ini run.py admin.py ${APP_DIR}/
 COPY backend/ ${APP_DIR}/backend/
 COPY --from=npm ${APP_DIR}/build ${APP_DIR}/build
 CMD nginx && startup-uwsgi

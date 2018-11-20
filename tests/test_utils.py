@@ -1,7 +1,5 @@
 import unittest
-from unittest.mock import MagicMock
-
-from backend.utils import format_text, connect_mongo, create_app, get_configs
+from backend.utils import format_text
 
 
 class TestFormatText(unittest.TestCase):
@@ -35,25 +33,3 @@ class TestFormatText(unittest.TestCase):
         format_text('$V', v=str)
         format_text('$V', v=lambda _: 1)
         format_text('$V', v=format_text)
-
-
-class TestMisc(unittest.TestCase):
-    def test_connect_mongo(self):
-        class FakeConfig(object):
-            db = 'db'
-            host = 'host'
-
-        fake_connect = MagicMock()
-        connect_mongo(FakeConfig, fake_connect)
-
-    def test_create_app(self):
-        flask = MagicMock()
-        cors = MagicMock()
-        app = create_app('secret', flask, cors)
-        self.assertEqual(app.secret_key, 'secret')
-        self.assertTrue(cors.called)
-
-    def test_get_configs(self):
-        handler = MagicMock()
-        get_configs(handler)
-        self.assertTrue(handler.called)

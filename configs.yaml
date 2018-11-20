@@ -1,0 +1,12 @@
+title: "Implicit and Explicit Association Testing"
+
+templates:
+  path: templates
+
+mongo:
+  db: devt5
+  host: localhost
+
+disclaimers:
+  path: disclaimer.md
+  consent_button: "I wish to proceed"

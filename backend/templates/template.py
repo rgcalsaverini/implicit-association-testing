@@ -74,7 +74,6 @@ class TestTemplate(object):
                                     isfile=isfile)
         disc = get_resource(path, self.id, 'disclaimer.md', True, open=open,
                             isfile=isfile)
-
         if isfile(disclaimers.path):
             with open(disclaimers.path, 'r') as disc_file:
                 generic = disc_file.read()
@@ -92,6 +91,7 @@ class TestTemplate(object):
             'text': intro_text,
             'button': consent_button,
             'name': self.name,
+            'main_title': config.get('title', 'Implicit Association Testing')
         }
 
     def questionnaire(self, path, point, open=open, isfile=os.path.isfile):

@@ -2,13 +2,14 @@ import os
 
 from flask import send_file
 from flask_kit import create_app
+from flask_kit import get_configs
+from mongoengine import connect
 
 from backend.models import create_models
 from backend.ui_api import ui_api
-from backend.utils import get_configs, connect_mongo
 
-configs = get_configs()
-connect_mongo(configs.mongo)
+configs = get_configs(filename='configs.yaml')
+connect(configs.mongo.db, host=configs.mongo.host)
 models = create_models()
 
 blueprints = [

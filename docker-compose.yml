@@ -5,7 +5,7 @@ services:
     image: registry.gitlab.com/rgcalsaverini/iff-iat/app:${APP_VERSION:-latest}
     volumes:
       - ${IAT_HOME:-/iat}/templates:/templates
-      - ${IAT_HOME:-/iat}/configs.json:/root/configs.json
+      - ${IAT_HOME:-/iat}/configs.yaml:/root/configs.yaml
       - ${IAT_HOME:-/iat}/disclaimer.md:/root/disclaimer.md
     ports:
       - 80:80

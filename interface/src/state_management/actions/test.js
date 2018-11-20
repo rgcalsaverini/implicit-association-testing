@@ -87,3 +87,10 @@ export const getFinalInfo = debouncedAction(500, templateId => (
     type: 'GET_FINAL_INFO',
   }
 ));
+
+export const closePopup = popupId => (
+  {
+    type: 'CLOSE_POPUP',
+    popupId,
+  }
+);
