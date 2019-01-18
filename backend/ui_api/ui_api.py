@@ -2,7 +2,7 @@ import datetime
 import json
 from functools import wraps
 
-from flask import Blueprint, session, request
+from flask import Blueprint, session
 from flask_kit import Router, BasicAccessControl
 from flask_kit.simple_router import make_error
 
@@ -37,7 +37,7 @@ def ui_api(models,
 
     def set_user(f, *args, **kwargs):
         if not session or 'user' not in session.keys():
-            new_user = models.User.new(request)
+            new_user = models.User.new()
             session['user'] = new_user.id
         return f(*args, **kwargs)
 

@@ -72,7 +72,7 @@ export const MatrixLabelCell = styled.div`
   max-width: 400px;
   min-width: 150px;
   overflow: hidden;
-  word-break: break-all;
+  word-break: break-word;
 `;
 
 export const DragBoard = styled.div`

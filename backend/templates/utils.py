@@ -7,6 +7,7 @@ class TemplateError(Exception):
 
 
 def all_templates(path, get_one):
+    """ List all templates """
     templates = list()
 
     for res in os.walk(path):

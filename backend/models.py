@@ -1,7 +1,6 @@
 import datetime
 import re
 import time
-from ipaddress import ip_address
 from uuid import uuid4
 
 import mongoengine
@@ -40,30 +39,15 @@ class ModelsContainer(object):
 
 
 def create_models(me=mongoengine):
-    class IPField(me.StringField):
-        def validate(self, value):
-            if value is None:
-                return
-            try:
-                ip_address(value)
-            except ValueError:
-                self.error('Invalid IP Address')
-
     class User(me.Document):
         id = me.StringField(primary_key=True)
         created_at = me.DateTimeField()
-        ip = IPField()
+        ip = me.StringField(default='')
 
         @staticmethod
-        def new(req):
+        def new():
             now = datetime.datetime.now()
-            environs = [
-                'HTTP_X_REAL_IP',
-                'HTTP_X_FORWARDED_FOR',
-                'REMOTE_ADDR',
-            ]
-            ip = [req.environ.get(e) for e in environs] + [req.remote_addr]
-            user = User(id=uuid4().hex, created_at=now, ip=ip[0])
+            user = User(id=uuid4().hex, created_at=now, ip='')
             return user.save()
 
         def json(self):
