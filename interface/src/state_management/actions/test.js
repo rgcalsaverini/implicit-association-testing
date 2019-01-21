@@ -94,3 +94,16 @@ export const closePopup = popupId => (
     popupId,
   }
 );
+
+export const getTestList = debouncedAction(500, () => (
+  {
+    payload: {
+      request: {
+        method: 'get',
+        url: '/ui-api/templates',
+        withCredentials: true,
+      },
+    },
+    type: 'GET_TEST_LIST',
+  }
+));

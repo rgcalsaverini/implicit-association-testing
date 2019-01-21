@@ -20,7 +20,8 @@ def all_templates(path, get_one):
         template = get_one(temp_id, full_path)
         templates.append({
             'id': temp_id,
-            'name': template.name
+            'name': template.name,
+            'description': template.description,
         })
     return templates
 

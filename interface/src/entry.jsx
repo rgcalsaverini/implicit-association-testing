@@ -8,6 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import IatTest from 'components/IatTest';
 import Login from 'components/Login';
 import AdminPanel from 'components/AdminPanel';
+import TestList from 'components/TestList';
 import { store } from 'state_management';
 import { colors } from 'base_styles';
 
@@ -40,6 +41,7 @@ export default function () {
             <Route path="/test/:templateId" component={IatTest} />
             <Route path="/admin" component={AdminPanel} />
             <Route path="/login" component={Login} />
+            <Route path="/" component={TestList} />
           </Switch>
         </MuiThemeProvider>
       </Provider>

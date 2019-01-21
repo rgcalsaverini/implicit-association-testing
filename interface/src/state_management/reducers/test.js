@@ -5,6 +5,7 @@ import constants from 'app_constants';
 const reducer = (state = {
   activeQuestion: null,
   answers: {},
+  availableTests: null,
   closedPopups: [],
   curentDuration: 0,
   curentMistakes: 0,
@@ -31,6 +32,25 @@ const reducer = (state = {
   const errorResponse = (action.error && action.error.response) || {};
 
   switch (action.type) {
+    case 'GET_TEST_LIST':
+      return {
+        ...state,
+        pendingReq: true,
+        error: null,
+        availableTests: null,
+      };
+    case 'GET_TEST_LIST_SUCCESS':
+      return {
+        ...state,
+        pendingReq: false,
+        availableTests: response.data,
+      };
+    case 'GET_TEST_LIST_FAIL':
+      return {
+        ...state,
+        pendingReq: false,
+        error: errorResponse,
+      };
     case 'GET_INTRO':
       return {
         ...state,

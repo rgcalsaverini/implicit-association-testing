@@ -4,7 +4,7 @@ from functools import wraps
 
 from flask import Blueprint, session
 from flask_kit import Router, BasicAccessControl
-from flask_kit.simple_router import make_error
+from flask_kit.simple_router.simple_router import make_error
 
 from backend.grading import grade
 from backend.templates.template import template_errors
@@ -95,17 +95,18 @@ def ui_api(models,
         return {'text': info or ''}
 
     @router.get('templates')
-    @access.allow('admin')
-    def list_templates():
+    @access.pass_permissions('role')
+    def list_templates(role):
         templates = all_templates(configs.templates.path, make_template)
-        today = datetime.datetime.fromordinal(
-            datetime.date.today().toordinal())
-        for temp in templates:
-            temp['started'] = count_tests(template=temp['id'])
-            temp['finished'] = count_tests(template=temp['id'], finished=True)
-            temp['today'] = count_tests(template=temp['id'],
-                                        created_at__gte=today)
-
+        if role == 'admin':
+            today = datetime.datetime.fromordinal(
+                datetime.date.today().toordinal())
+            for temp in templates:
+                temp['started'] = count_tests(template=temp['id'])
+                temp['finished'] = count_tests(template=temp['id'],
+                                               finished=True)
+                temp['today'] = count_tests(template=temp['id'],
+                                            created_at__gte=today)
         return templates
 
     @router.get('templates/<string:template_id>')

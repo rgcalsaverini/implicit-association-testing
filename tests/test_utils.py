@@ -33,3 +33,4 @@ class TestFormatText(unittest.TestCase):
         format_text('$V', v=str)
         format_text('$V', v=lambda _: 1)
         format_text('$V', v=format_text)
+

@@ -7,8 +7,10 @@ services:
       - ${IAT_HOME:-/iat}/templates:/templates
       - ${IAT_HOME:-/iat}/configs.yaml:/root/configs.yaml
       - ${IAT_HOME:-/iat}/disclaimer.md:/root/disclaimer.md
+      - ${IAT_HOME:-/iat}/ssl:/ssl
     ports:
       - 80:80
+      - 443:443
     networks:
       - iat_network
 
