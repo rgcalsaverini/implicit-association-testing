@@ -17,7 +17,7 @@ services:
   mongo:
     image: mongo:3.7
     volumes:
-      - /iat/db:/data/db
+      - ${IAT_HOME:-/iat}/db:/data/db
     networks:
       - iat_network
 
